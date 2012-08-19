@@ -1,4 +1,4 @@
- #ifndef COLOR_H
+#ifndef COLOR_H
 #define COLOR_H
 
 #include <iostream>
@@ -7,19 +7,22 @@ using std::endl;
 
 class Color
 {
-    public:
-        Color(int p_red, int p_green, int p_blue);
-        virtual ~Color();
+public:
+	Color(int p_red, int p_green, int p_blue);
+	virtual ~Color();
+	friend ostream& operator<<(ostream& output, const Color& color);
 
-        int getRed() {return red;}
-        int getGreen() {return green;}
-        int getBlue() {return blue;}
+	float red;
+	float green;
+	float blue;
 
-        float red;
-        float green;
-        float blue;
+	float getBlue() const;
+	void setBlue(float blue);
+	float getGreen() const;
+	void setGreen(float green);
+	void setRed(float red);
+	float getRed() const;
 
-        friend ostream& operator<<(ostream& output, const Color& color);
 };
 
 #endif // COLOR_H
