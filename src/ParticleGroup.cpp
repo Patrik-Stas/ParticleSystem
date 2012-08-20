@@ -11,11 +11,9 @@
 
 #include "ParticleGroup.h"
 
-ParticleGroup::ParticleGroup(const float p_spawnArea_X1, const float p_spawnArea_Y1, const float p_spawnAreaX2,
-		const float p_spawnAreaY2)
+ParticleGroup::ParticleGroup(ShapeRectangle p_moveableArea)
 {
-	setSpawnArea(p_spawnArea_X1, p_spawnArea_Y1, p_spawnAreaX2, p_spawnAreaY2);
-	setSpawnDirection(0, 360, +1);
+	moveableArea = p_moveableArea;
 	defFriction = 0;
 	srand(time(NULL));
 }
@@ -24,45 +22,16 @@ void ParticleGroup::pushSpawnparticles(int p_count)
 {
 	for (int i = 0; i < p_count; i++)
 	{
-		float newX = generate_spawnX();
-		float newY = generate_spawnY();
-
-		float newDirection = generate_spawnDirection();
-		std::cout << "newx: " << newX << "   newy: " << newY << std::endl;
-		pushObject(newX, newY, newDirection);
+		Point pt = moveableArea.getInsidePoint();
+		pushObject(pt);
+		std::cout << "get inside point:   x:" << pt.x << "   y:" << pt.y << std::endl;
 	}
 }
 
-float ParticleGroup::generate_spawnX()
+void ParticleGroup::pushObject(Point p_spawnPoint)
 {
-	int xDispersion = spawn_Xmax - spawn_Xmin; /// accuracy loose was purpose to avoid trouble with floating unperfection
-	if (xDispersion != 0)
-		return (spawn_Xmin + rand() % xDispersion);
-	else
-		return (spawn_Xmin);
-}
-
-float ParticleGroup::generate_spawnY()
-{
-	int yDispersion = spawn_Ymax - spawn_Ymin;
-	if (yDispersion != 0)
-		return (spawn_Ymin + rand() % yDispersion);
-	else
-		return spawn_Ymin;
-}
-
-float ParticleGroup::generate_spawnDirection()
-{
-	if (spawn_directionFrom - spawn_directionTo == 0)
-		return spawn_directionFrom;
-	else
-		return (rand() % (int) (spawn_directionFrom - spawn_directionTo));
-}
-
-void ParticleGroup::pushObject(float p_x, float p_y, float p_direction)
-{
-	Particle* newParticle = Particle::getParticle(p_x, p_y);
-	newParticle->setFriction(0.1);
+	Particle* newParticle = Particle::getParticle(p_spawnPoint);
+	newParticle->setFriction(defFriction);
 	particles.push_back(newParticle);
 }
 
@@ -91,50 +60,14 @@ void ParticleGroup::processData(float framerate)
 	std::list<Particle*>::iterator beginIt = particles.begin();
 	std::list<Particle*>::iterator endIt = particles.end();
 	std::list<Particle*>::iterator tmpIt;
+	Particle * particle = NULL;
 	for (tmpIt = beginIt; tmpIt != endIt; tmpIt++)
 	{
-		(*tmpIt)->processData(framerate);
+		particle = *tmpIt;
+		particle->processData(framerate);
+		if (!moveableArea.isInsideX(particle->getAx())) particle->invertVectorX();
+		if (!moveableArea.isInsideY(particle->getAy())) particle->invertVectorY();
 	}
-}
-
-void ParticleGroup::setSpawnPoint(float p_x1, float p_y1)
-{
-	spawn_Xmin = p_x1;
-	spawn_Xmax = p_x1;
-	spawn_Ymin = p_y1;
-	spawn_Ymax = p_y1;
-}
-
-void ParticleGroup::setSpawnArea(float p_x1, float p_y1, float p_x2, float p_y2)
-{
-	if (p_x1 <= p_x2)
-	{
-		spawn_Xmin = p_x1;
-		spawn_Xmax = p_x2;
-	}
-	else
-	{
-		spawn_Xmin = p_x2;
-		spawn_Xmax = p_x1;
-	}
-
-	if (p_y1 <= p_y2)
-	{
-		spawn_Ymin = p_y1;
-		spawn_Ymax = p_y2;
-	}
-	else
-	{
-		spawn_Ymin = p_y2;
-		spawn_Ymax = p_y1;
-	}
-}
-
-void ParticleGroup::setSpawnDirection(float p_dirFrom, float p_dirTo, int orientation)
-{
-	spawn_directionFrom = p_dirFrom;
-	spawn_directionTo = p_dirTo;
-	spawn_directionOrientation = (orientation >= 0) ? 1 : -1;
 }
 
 ParticleGroup::~ParticleGroup()

@@ -35,3 +35,8 @@ Particle* Particle::getParticle(float p_ax, float p_ay)
 	return new Particle(p_ax, p_ay);
 }
 
+Particle* Particle::getParticle(Point p_pt)
+{
+	return new Particle(p_pt.x, p_pt.y);
+}
+

@@ -8,11 +8,14 @@
 #ifndef SHAPE_H_
 #define SHAPE_H_
 
+#include "Point.h"
+
 class Shape
 {
 public:
 	Shape();
-	virtual bool isInside();
+	virtual bool isInside(Point p_pt) const = 0;
+	virtual Point getInsidePoint() const = 0;
 	virtual ~Shape();
 };
 

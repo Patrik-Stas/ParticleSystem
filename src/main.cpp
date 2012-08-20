@@ -53,7 +53,7 @@ int testvis_push(float p_speed)
 	particle.setVectorXY(1,2);
 	particle.setFriction(0);
 
-	ParticleGroup particleGroup(50, 50, 300, 300);
+	ParticleGroup particleGroup(ShapeRectangle(10,10,500,500));
 	particleGroup.pushSpawnparticles(200);
 	particleGroup.setRandVect();
 	ParticleGroupPainter particleGroupPainter(&particleGroup, &App);

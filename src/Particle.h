@@ -10,6 +10,7 @@
 
 #include <math.h>
 #include <climits>
+#include "Point.h"
 
 #define PI 3.14159265
 
@@ -23,7 +24,7 @@ public:
     void setFriction   (float p_friction)    {friction = p_friction;};
     void setVectorX    (float p_vectorX)     {vectorX = p_vectorX;};
     void setVectorY    (float p_vectorY)     {vectorY = p_vectorY;};
-    void setVectorXY (float p_vectorX, float p_vectorY);
+    void setVectorXY   (float p_vectorX, float p_vectorY);
     void invertVectorX   ()                  {setVectorX(-getVectorX());};
     void invertVectorY   ()                  {setVectorY(-getVectorY());};
     void invertVectorXY  ()                  {invertVectorX(); invertVectorY();};
@@ -40,6 +41,7 @@ public:
     void processData(float framerate);
 
     static Particle* getParticle(float p_ax, float p_ay);
+    static Particle* getParticle(Point p_pt);
 
     static void fixDirection ();
 
