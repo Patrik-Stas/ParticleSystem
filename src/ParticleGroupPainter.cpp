@@ -22,7 +22,6 @@ void ParticleGroupPainter::paint()
 	for (particle = beginIt; particle != endIt; particle++)
 	{
 		window->Draw(sf::Shape::Circle((*particle)->getAx(), (*particle)->getAy(), 2, sf::Color::Yellow));
-	//	std::cout << "ax: " << (*particle)->getAx() << "   ay:" << (*particle)->getAy() << std::endl;
 	}
 }
 

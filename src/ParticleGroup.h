@@ -27,7 +27,7 @@ public:
 	void pushObject(Point p_spawnPoint);
 	void pushObject(Particle* object);
 	void setRandVect();
-	void processData(float framerate);
+	void processData(float framerate, Point gravityPoint );
 
 private:
 	ShapeRectangle moveableArea;

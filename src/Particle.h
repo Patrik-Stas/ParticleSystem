@@ -25,6 +25,11 @@ public:
     void setVectorX    (float p_vectorX)     {vectorX = p_vectorX;};
     void setVectorY    (float p_vectorY)     {vectorY = p_vectorY;};
     void setVectorXY   (float p_vectorX, float p_vectorY);
+
+    void pushX(float p_vectorX) { vectorX+=p_vectorX; }
+    void pushY(float p_vectorY) { vectorY+=p_vectorY; }
+    void pushXY(float p_vectorX, float p_vectorY) { pushX(p_vectorX); pushY(p_vectorY); }
+
     void invertVectorX   ()                  {setVectorX(-getVectorX());};
     void invertVectorY   ()                  {setVectorY(-getVectorY());};
     void invertVectorXY  ()                  {invertVectorX(); invertVectorY();};

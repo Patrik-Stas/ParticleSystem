@@ -8,8 +8,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
+#include <math.h>
 
 #include "ParticleGroup.h"
+
+#define PI 3.14159265
 
 ParticleGroup::ParticleGroup(ShapeRectangle p_moveableArea)
 {
@@ -49,13 +52,13 @@ void ParticleGroup::setRandVect()
 	{
 		int xPole = (rand() % 2) ? 1 : -1;
 		int yPole = (rand() % 2) ? 1 : -1;
-		int xVect = (rand() % 10000 / 10) * xPole;
-		int yVect = (rand() % 10000 / 10) * yPole;
+		int xVect = (rand() % 1000 / 30) * xPole;
+		int yVect = (rand() % 1000 / 30) * yPole;
 		(*tmpIt)->setVectorXY(xVect, yVect);
 	}
 }
 
-void ParticleGroup::processData(float framerate)
+void ParticleGroup::processData(float framerate, Point gravityPoint )
 {
 	std::list<Particle*>::iterator beginIt = particles.begin();
 	std::list<Particle*>::iterator endIt = particles.end();
@@ -65,7 +68,18 @@ void ParticleGroup::processData(float framerate)
 	{
 		particle = *tmpIt;
 		particle->processData(framerate);
-		if (!moveableArea.isInsideX(particle->getAx())) particle->invertVectorX();
+		float distX = particle->getAx() - gravityPoint.x;
+		float distY = particle->getAy() - gravityPoint.y;
+		float distance = sqrt(distX*distX + distY*distY);
+		float particleMass = 1;
+		float mouseMass = 1000;
+		float gravitation = 2;
+		float force = gravitation * ( (particleMass * mouseMass) / (distance*distance) );
+		float angle = atan2(distY, distX) * 180 / PI;
+		float pushX = cos(angle*PI/180) * force;
+		float pushY = sin(angle*PI/180) * force;
+		particle->pushXY(-pushX, -pushY);
+		//if (!moveableArea.isInsideX(particle->getAx())) particle->invertVectorX();
 		if (!moveableArea.isInsideY(particle->getAy())) particle->invertVectorY();
 	}
 }

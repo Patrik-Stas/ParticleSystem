@@ -55,8 +55,10 @@ int testvis_push(float p_speed)
 
 	ParticleGroup particleGroup(ShapeRectangle(10,10,500,500));
 	particleGroup.pushSpawnparticles(200);
-	particleGroup.setRandVect();
+	//particleGroup.setRandVect();
 	ParticleGroupPainter particleGroupPainter(&particleGroup, &App);
+
+	Point mouse(0,0);
 
 	while (App.IsOpened())
 	{
@@ -67,10 +69,12 @@ int testvis_push(float p_speed)
 		{
 			if (Event.Type == sf::Event::Closed)
 				App.Close();
+			if (Event.Type == sf::Event::MouseMoved || Event.Type == sf::Event::MouseEntered )
+				mouse = Point(Event.MouseMove.X, Event.MouseMove.Y);
 		}
 		App.Clear();
 		App.Draw(sf::Shape::Rectangle(0, 0, 600, 350, sf::Color(gradient.red, gradient.green, gradient.blue)));
-		particleGroup.processData(60);
+		particleGroup.processData(60, mouse);
 		particleGroupPainter.paint();
 		App.Display();
 	}
