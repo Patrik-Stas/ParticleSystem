@@ -8,12 +8,15 @@ class Gradient: public Color
 {
 
 public:
-
-
 	Gradient(int p_red, int p_green, int p_blue);
+
+	float speed; // 0-1
+	float getSpeed() const;
+	void setSpeed(float speed);
+
 	void shiftColor();
 	std::vector<Color> colors;
-	float speed; // 0-1
+
 	friend ostream& operator<<(ostream& output, const Gradient& gradient);
 
 protected:

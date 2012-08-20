@@ -10,11 +10,9 @@ class Color
 public:
 	Color(int p_red, int p_green, int p_blue);
 	virtual ~Color();
+	bool operator==(Color& c1);
+	bool operator!=(Color& c1);
 	friend ostream& operator<<(ostream& output, const Color& color);
-
-	float red;
-	float green;
-	float blue;
 
 	float getBlue() const;
 	void setBlue(float blue);
@@ -22,6 +20,10 @@ public:
 	void setGreen(float green);
 	void setRed(float red);
 	float getRed() const;
+
+	float red;
+	float green;
+	float blue;
 
 };
 

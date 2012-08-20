@@ -3,21 +3,19 @@
 
 Color::Color(int p_red, int p_green, int p_blue)
 {
-	red = p_red;
-	green = p_green;
-	blue = p_blue;
+	setRed(p_red);
+	setGreen(p_green);
+	setBlue(p_blue);
 }
 
 std::ostream& operator<<(ostream& output, const Color& color)
 {
-	output << "Color (" << color.red << ", " << color.green << "," << color.blue
-			<< ")";
+	output << "Color (" << color.red << ", " << color.green << "," << color.blue << ")";
 	return output;
 }
 
 Color::~Color()
 {
-	//dtor
 }
 
 float Color::getBlue() const
@@ -27,6 +25,8 @@ float Color::getBlue() const
 
 void Color::setBlue(float blue)
 {
+	blue = (blue > 255) ? 255 : blue;
+	blue = (blue < 0) ? 0 : blue;
 	this->blue = blue;
 }
 
@@ -37,6 +37,9 @@ float Color::getGreen() const
 
 void Color::setGreen(float green)
 {
+
+	green = (green > 255) ? 255 : green;
+	green = (green < 0) ? 0 : green;
 	this->green = green;
 }
 
@@ -47,5 +50,20 @@ float Color::getRed() const
 
 void Color::setRed(float red)
 {
+	red = (red > 255) ? 255 : red;
+	red = (red < 0) ? 0 : red;
 	this->red = red;
+}
+
+bool Color::operator==(Color& c1)
+{
+	if ((int) red == (int) c1.red && (int) green == (int) c1.green && (int) blue == (int) c1.blue)
+		return true;
+	else
+		return false;
+}
+
+bool Color::operator!=(Color& c1)
+{
+	return !(*this == c1);
 }
