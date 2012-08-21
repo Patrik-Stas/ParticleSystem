@@ -40,6 +40,18 @@ int TAcolorBounds()
 int testvis_push(float p_speed)
 {
     sf::RenderWindow App(sf::VideoMode(800, 600), "SFML Shapes");
+
+
+	sf::Image Image;
+	if (!Image.LoadFromFile("particle.tga"))
+	{
+	    cerr << "failed loading image" << endl;
+	    abort();
+	}
+
+	sf::Sprite particleSprite;
+	particleSprite.SetImage(Image);
+	particleSprite.SetScale(0.5f, 0.5f);
 	Gradient gradient(0, 0, 255);
 	gradient.setSpeed(p_speed);
 	gradient.colors.push_back(Color(255,0,0));
@@ -49,18 +61,13 @@ int testvis_push(float p_speed)
 	gradient.colors.push_back(Color(0,0,244));
 	gradient.colors.push_back(Color(1,255,1));*/
 
-	ParticleGroup particleGroup(ShapeRectangle(10,10,10,500));
-	particleGroup.pushSpawnparticles(1000);
+	ParticleGroup particleGroup(ShapeRectangle(10,10,10,500),particleSprite );
+	particleGroup.pushSpawnparticles(100);
 	ParticleGroupPainter particleGroupPainter(&particleGroup, &App);
 
 	Point mouse(0,0);
 
-	sf::Image Image;
-	if (!Image.LoadFromFile("particle.tga"))
-	{
-	    cerr << "failed loading image" << endl;
-	    abort();
-	}
+
 
 
 	while (App.IsOpened())

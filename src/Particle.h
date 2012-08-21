@@ -53,10 +53,10 @@ public:
     float getVectorY() const  {return vectorY;};
 
     void processData(float framerate);
-    virtual void paint(sf::RenderWindow* window) const = 0;
+    virtual void paint(sf::RenderWindow* window) = 0;
 
-    static Particle* getParticle(float p_ax, float p_ay, PARTICLE_TYPE type);
-    static Particle* getParticle(Point p_pt, PARTICLE_TYPE type);
+    static Particle* getParticleSfmlPrimitive(float p_ax, float p_ay);
+    static Particle* getParticleSfmlSprite(float p_ax, float p_ay, sf::Sprite p_sprite);
 
     static void fixDirection ();
 

@@ -16,7 +16,7 @@ class ParticleSfmlPrimitive : public Particle
 {
 public:
 	ParticleSfmlPrimitive(float p_ax, float p_ay);
-	void paint(sf::RenderWindow* window) const;
+	void paint(sf::RenderWindow* window) ;
 	virtual ~ParticleSfmlPrimitive();
 };
 

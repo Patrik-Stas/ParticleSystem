@@ -12,7 +12,7 @@ ParticleSfmlPrimitive::ParticleSfmlPrimitive(float p_ax, float p_ay) : Particle(
 	// TODO Auto-generated constructor stub
 }
 
-void ParticleSfmlPrimitive::paint(sf::RenderWindow* window) const
+void ParticleSfmlPrimitive::paint(sf::RenderWindow* window)
 {
 	window->Draw(sf::Shape::Circle(this->getAx(),getAy(), 1, sf::Color::Yellow));
 }

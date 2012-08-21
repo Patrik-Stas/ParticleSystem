@@ -14,10 +14,11 @@
 
 #define PI 3.14159265
 
-ParticleGroup::ParticleGroup(ShapeRectangle p_moveableArea)
+ParticleGroup::ParticleGroup(ShapeRectangle p_moveableArea, sf::Sprite p_defaultParticleSprite)
 {
 	moveableArea = p_moveableArea;
 	defFriction = 0;
+	particleSprite = p_defaultParticleSprite;
 	srand(time(NULL));
 }
 
@@ -32,7 +33,9 @@ void ParticleGroup::pushSpawnparticles(int p_count)
 
 void ParticleGroup::pushObject(Point p_spawnPoint)
 {
-	Particle* newParticle = Particle::getParticle(p_spawnPoint, SFML_PRIMITIVE);
+//	Particle* newParticle = Particle::getParticleSfmlPrimitive(p_spawnPoint.x,p_spawnPoint.y  );
+	Particle* newParticle = Particle::getParticleSfmlSprite(p_spawnPoint.x,p_spawnPoint.y, particleSprite  );
+
 	newParticle->setFriction(defFriction);
 	particles.push_back(newParticle);
 }

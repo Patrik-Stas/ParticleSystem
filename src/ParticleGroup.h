@@ -20,7 +20,7 @@ public:
 	ParticleGroup();
 	list<Particle*> particles;
 
-	ParticleGroup(ShapeRectangle p_moveableArea );
+	ParticleGroup(ShapeRectangle p_moveableArea, sf::Sprite p_defaultSprite );
 	~ParticleGroup();
 
 	void pushSpawnparticles(int p_count);
@@ -32,6 +32,7 @@ public:
 private:
 	ShapeRectangle moveableArea;
 	int defFriction;
+	sf::Sprite particleSprite;
 };
 
 #endif /* PARTICLEGROUP_H_ */

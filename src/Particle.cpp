@@ -36,16 +36,16 @@ void Particle::setVectorXY(float p_vectorX, float p_vectorY)
 	vectorY = p_vectorY;
 }
 
-Particle* Particle::getParticle(float p_ax, float p_ay, PARTICLE_TYPE p_type)
+Particle* Particle::getParticleSfmlPrimitive(float p_ax, float p_ay)
 {
-	if (p_type == SFML_PRIMITIVE ) return new ParticleSfmlPrimitive(p_ax, p_ay);
-	else if (p_type == SFML_SPRITE) return new ParticleSfmlSprite(p_ax, p_ay);
-	else abort();
+	return new ParticleSfmlPrimitive(p_ax, p_ay);
 }
 
-Particle* Particle::getParticle(Point p_pt, PARTICLE_TYPE p_type)
+Particle* Particle::getParticleSfmlSprite(float p_ax, float p_ay, sf::Sprite p_sprite)
 {
-	return getParticle(p_pt.x, p_pt.y, p_type);
+	 return new ParticleSfmlSprite(p_ax, p_ay, p_sprite );
 }
+
+
 
 

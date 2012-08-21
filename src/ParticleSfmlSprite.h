@@ -13,9 +13,11 @@
 class ParticleSfmlSprite : public Particle
 {
 public:
-	ParticleSfmlSprite(float p_ax, float p_ay);
-	void paint(sf::RenderWindow* window) const;
+	ParticleSfmlSprite(float p_ax, float p_ay, sf::Sprite p_sprite);
+	void paint(sf::RenderWindow* window);
 	virtual ~ParticleSfmlSprite();
+private:
+	sf::Sprite sprite;
 };
 
 #endif /* PARTICLESFML_H_ */
