@@ -10,14 +10,23 @@
 
 #include <math.h>
 #include <climits>
+#include <SFML/Graphics.hpp>
+
 #include "Point.h"
 
 #define PI 3.14159265
+
+enum PARTICLE_TYPE
+{
+	SFML_SPRITE,
+	SFML_PRIMITIVE
+};
 
 class Particle
 {
 public:
 	Particle (float p_ax, float p_ay);
+	virtual ~Particle();
 
     void setPosition(float p_ax, float p_ay) {ax=p_ax; ay=p_ay;};
 
@@ -30,25 +39,27 @@ public:
     void pushY(float p_vectorY) { vectorY+=p_vectorY; }
     void pushXY(float p_vectorX, float p_vectorY) { pushX(p_vectorX); pushY(p_vectorY); }
 
-    void invertVectorX   ()                  {setVectorX(-getVectorX());};
-    void invertVectorY   ()                  {setVectorY(-getVectorY());};
-    void invertVectorXY  ()                  {invertVectorX(); invertVectorY();};
+    void invertVectorX   ()    {setVectorX(-getVectorX());};
+    void invertVectorY   ()    {setVectorY(-getVectorY());};
+    void invertVectorXY  ()    {invertVectorX(); invertVectorY();};
 
-    float getAx()         {return ax;};
-    float getAy()         {return ay;};
-    float getLastAx()     {return lastAX;};
-    float getLastAy()     {return lastAY;};
+    float getAx() const        {return ax;};
+    float getAy() const        {return ay;};
+    float getLastAx() const    {return lastAX;};
+    float getLastAy() const    {return lastAY;};
 
-    float getFriction() {return friction;};
-    float getVectorX()  {return vectorX;};
-    float getVectorY()  {return vectorY;};
+    float getFriction() const {return friction;};
+    float getVectorX() const  {return vectorX;};
+    float getVectorY() const  {return vectorY;};
 
     void processData(float framerate);
+    virtual void paint(sf::RenderWindow* window) const = 0;
 
-    static Particle* getParticle(float p_ax, float p_ay);
-    static Particle* getParticle(Point p_pt);
+    static Particle* getParticle(float p_ax, float p_ay, PARTICLE_TYPE type);
+    static Particle* getParticle(Point p_pt, PARTICLE_TYPE type);
 
     static void fixDirection ();
+
 
 private:
     float ax;

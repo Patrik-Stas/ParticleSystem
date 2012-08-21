@@ -27,13 +27,12 @@ void ParticleGroup::pushSpawnparticles(int p_count)
 	{
 		Point pt = moveableArea.getInsidePoint();
 		pushObject(pt);
-		std::cout << "get inside point:   x:" << pt.x << "   y:" << pt.y << std::endl;
 	}
 }
 
 void ParticleGroup::pushObject(Point p_spawnPoint)
 {
-	Particle* newParticle = Particle::getParticle(p_spawnPoint);
+	Particle* newParticle = Particle::getParticle(p_spawnPoint, SFML_PRIMITIVE);
 	newParticle->setFriction(defFriction);
 	particles.push_back(newParticle);
 }
@@ -72,7 +71,7 @@ void ParticleGroup::processData(float framerate, Point gravityPoint )
 		float distY = particle->getAy() - gravityPoint.y;
 		float distance = sqrt(distX*distX + distY*distY);
 		float particleMass = 1;
-		float mouseMass = 1000;
+		float mouseMass = 1000	;
 		float gravitation = 2;
 		float force = gravitation * ( (particleMass * mouseMass) / (distance*distance) );
 		float angle = atan2(distY, distX) * 180 / PI;
@@ -80,7 +79,7 @@ void ParticleGroup::processData(float framerate, Point gravityPoint )
 		float pushY = sin(angle*PI/180) * force;
 		particle->pushXY(-pushX, -pushY);
 		//if (!moveableArea.isInsideX(particle->getAx())) particle->invertVectorX();
-		if (!moveableArea.isInsideY(particle->getAy())) particle->invertVectorY();
+		//if (!moveableArea.isInsideY(particle->getAy())) particle->invertVectorY();
 	}
 }
 

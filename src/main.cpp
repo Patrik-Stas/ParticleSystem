@@ -49,20 +49,22 @@ int testvis_push(float p_speed)
 	gradient.colors.push_back(Color(0,0,244));
 	gradient.colors.push_back(Color(1,255,1));*/
 
-	Particle particle (10, 10);
-	particle.setVectorXY(1,2);
-	particle.setFriction(0);
-
-	ParticleGroup particleGroup(ShapeRectangle(10,10,500,500));
-	particleGroup.pushSpawnparticles(200);
-	//particleGroup.setRandVect();
+	ParticleGroup particleGroup(ShapeRectangle(10,10,10,500));
+	particleGroup.pushSpawnparticles(1000);
 	ParticleGroupPainter particleGroupPainter(&particleGroup, &App);
 
 	Point mouse(0,0);
 
+	sf::Image Image;
+	if (!Image.LoadFromFile("particle.tga"))
+	{
+	    cerr << "failed loading image" << endl;
+	    abort();
+	}
+
+
 	while (App.IsOpened())
 	{
-		particle.processData(60);
 		gradient.shiftColor();
 		sf::Event Event;
 		while (App.GetEvent(Event))
