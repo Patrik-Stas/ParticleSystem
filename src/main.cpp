@@ -30,75 +30,76 @@ int main(int argc, char *argv[])
 
 int testvis_push(float p_speed)
 {
-    sf::RenderWindow App(sf::VideoMode(800, 600), "SFML Shapes");
-
-	sf::Image Image;
-	if (!Image.LoadFromFile("media/particle.tga"))
-	{
-	    cerr << "failed loading image" << endl;
-	    abort();
-	}
+    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Shapes");
 
 	sf::Font MyFont;
-	if (!MyFont.LoadFromFile("media/DejaVuSans.ttf"))
+	if (!MyFont.loadFromFile("media/DejaVuSans.ttf"))
 	{
 		std::cerr << "cant load font" << std::endl;
 	    abort();
 	}
-	sf::String Text("Hello", MyFont, 10);
-	Text.SetPosition(300,100);
+	sf::Text Text("Text", MyFont, 30);
+	Text.setPosition(300,100);
 
-    App.ShowMouseCursor(false); // Hide cursor
+    window.setMouseCursorVisible(false); // Hide cursor
     // Load image and create sprite
 
-	sf::Sprite particleSprite;
-	particleSprite.SetImage(Image);
-	particleSprite.SetScale(0.5f, 0.5f);
+    sf::Texture particleTexture;
+    particleTexture.loadFromFile ("media/particle.tga");
+	sf::Sprite particleSprite(particleTexture);
+	particleSprite.setScale(0.5f, 0.5f);
 	Gradient gradient(0, 0, 255);
 	gradient.setSpeed(p_speed);
 	gradient.colors.push_back(Color(255,0,0));
 	gradient.colors.push_back(Color(0,0,255));
 
-	ShapeRectangle spawnArea(50,50,80,80);
-	ShapeRectangle moveableArea(10, 10, 400, 400);
+	ShapeRectangle spawnArea(300,50,140,140);
+	ShapeRectangle moveableArea(50, 10, 500, 500);
 
 	ParticleGroup particleGroup(spawnArea, moveableArea, 1, particleSprite );
-	particleGroup.pushSpawnparticles(2200);
-	ParticleGroupPainter particleGroupPainter(&particleGroup, &App);
+	particleGroup.pushSpawnparticles(10200);
+	ParticleGroupPainter particleGroupPainter(&particleGroup, &window);
 
-	int gravityPointWeight = 10000;
+	int gravityPointWeight = 1000000;
 	Color gravityPointColor =  Color(0,255,0,255);
 	ParticleSfmlPrimitive gravityPoint(0,0, gravityPointWeight, gravityPointColor);
 
-	const int gravitation = 1;
+	const float gravitation = 0.1;
 
-    sf::Clock Clock;
-    Clock.Reset();
-	while (App.IsOpened())
+    sf::Clock clock;
+    clock.restart();
+
+    sf::Event event;
+    sf::Time lastTime = clock.getElapsedTime();
+    float framerate;
+
+	while (window.isOpen())
 	{
 		gradient.shiftColor();
-		sf::Event Event;
-		while (App.GetEvent(Event))
+		sf::Event event;
+		while (window.pollEvent(event))
 		{
-			if (Event.Type == sf::Event::Closed)
-				App.Close();
-			if (Event.Type == sf::Event::MouseMoved || Event.Type == sf::Event::MouseEntered )
+			if (event.type == sf::Event::Closed)
+				window.close();
+			if (event.type == sf::Event::MouseMoved || event.type == sf::Event::MouseEntered )
 			{
-				gravityPoint.setPosition(Event.MouseMove.X, Event.MouseMove.Y);
+				gravityPoint.setPosition(event.mouseMove.x, event.mouseMove.y);
 			}
 		}
-		App.Clear();
+		window.clear();
 
-        float framerate=1/App.GetFrameTime();
+
+        framerate = 1 / (clock.getElapsedTime() - lastTime).asSeconds();
+        lastTime = clock.getElapsedTime();
         std::cout << "fps: " << framerate << std::endl;
-		App.Draw(sf::Shape::Rectangle(0, 0, 5, 350, sf::Color(gradient.red, gradient.green, gradient.blue)));
+		//window.draw(sf::RectangleShape(0, 0, 5, 350, sf::Color(gradient.red, gradient.green, gradient.blue)));
 		particleGroup.applyPhysics(gravitation, gravityPoint);
-		particleGroup.processData(framerate);
+		particleGroup.processData(60);
 		particleGroupPainter.paint();
-		gravityPoint.paint(&App);
-		Text.SetText(boost::lexical_cast<string>( particleGroup.getParticleCount() ));
-		App.Draw(Text);
-		App.Display();
+		gravityPoint.paint(&window);
+		Text.setString(boost::lexical_cast<string>( particleGroup.getParticleCount() ));
+		window.draw(Text);
+		window.display();
 
 	}
 

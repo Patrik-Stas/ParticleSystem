@@ -79,7 +79,7 @@ void ParticleGroup::respawn(std::list<Particle*>::iterator particle, Shape* shap
 	(*particle)->stop();
 }
 
-void ParticleGroup::applyPhysics(const int gravitation, const Particle& gravityPoint)
+void ParticleGroup::applyPhysics(const float gravitation, const Particle& gravityPoint)
 {
 	std::list<Particle*>::iterator beginIt = particles.begin();
 	std::list<Particle*>::iterator endIt = particles.end();

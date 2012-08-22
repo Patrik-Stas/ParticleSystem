@@ -14,7 +14,10 @@ ParticleSfmlPrimitive::ParticleSfmlPrimitive(float p_ax, float p_ay, float p_wei
 
 void ParticleSfmlPrimitive::paint(sf::RenderWindow* window)
 {
-	window->Draw(sf::Shape::Circle(getAx(),getAy(), 3, sf::Color(color.red, color.green, color.blue, color.alpha)));
+	sf::CircleShape circle(3);
+	circle.setPosition(getAx(), getAy());
+	circle.setFillColor ( sf::Color(color.red, color.green, color.blue, color.alpha));
+	window->draw(circle);
 //	window->Draw(sf::Shape::Rectangle(getAx(),getAy(),getAx()+1,getAy()+1, sf::Color::Yellow));
 }
 

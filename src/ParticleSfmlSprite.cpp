@@ -15,9 +15,9 @@ ParticleSfmlSprite::ParticleSfmlSprite(float p_ax, float p_ay, float p_weight, s
 
 void ParticleSfmlSprite::paint(sf::RenderWindow* window)
 {
-	sprite.SetColor(sf::Color(color.red, color.green, color.blue, color.alpha));
-	sprite.SetPosition(getAx(), getAy());
-	window->Draw(sprite);
+	sprite.setColor(sf::Color(color.red, color.green, color.blue, color.alpha));
+	sprite.setPosition(getAx(), getAy());
+	window->draw(sprite);
 }
 
 ParticleSfmlSprite::~ParticleSfmlSprite()

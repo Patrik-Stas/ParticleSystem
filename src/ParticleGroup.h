@@ -29,7 +29,7 @@ public:
 	void pushObject(Particle* object);
 	void setRandVect();
 	void processData(float framerate);
-	void applyPhysics(const int gravity, const Particle& gravityPoint);
+	void applyPhysics(const float gravity, const Particle& gravityPoint);
 	void respawn(std::list<Particle*>::iterator particle, Shape* shape);
 	int getParticleCount();
 
