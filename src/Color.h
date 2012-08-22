@@ -8,22 +8,28 @@ using std::endl;
 class Color
 {
 public:
-	Color(int p_red, int p_green, int p_blue);
+	Color(int p_red, int p_green, int p_blue, int alpha=255);
+	Color();
 	virtual ~Color();
 	bool operator==(Color& c1);
 	bool operator!=(Color& c1);
 	friend ostream& operator<<(ostream& output, const Color& color);
 
 	float getBlue() const;
-	void setBlue(float blue);
+	void setBlue(int blue);
 	float getGreen() const;
-	void setGreen(float green);
-	void setRed(float red);
+	void setGreen(int green);
+	void setRed(int red);
 	float getRed() const;
+	void setAlpha(int red);
+	float getAlpha() const;
 
 	float red;
 	float green;
 	float blue;
+	float alpha;
+private:
+	void checkColorValue(int& p_colorVal);
 
 };
 

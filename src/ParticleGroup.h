@@ -20,18 +20,18 @@ public:
 	ParticleGroup();
 	list<Particle*> particles;
 
-	ParticleGroup(ShapeRectangle p_moveableArea, sf::Sprite p_defaultSprite );
+	ParticleGroup(ShapeRectangle p_spawnArea, float p_defaultWeight, sf::Sprite p_defaultSprite );
 	~ParticleGroup();
 
 	void pushSpawnparticles(int p_count);
 	void pushObject(Point p_spawnPoint);
 	void pushObject(Particle* object);
 	void setRandVect();
-	void processData(float framerate, Point gravityPoint );
+	void processData(float framerate);
 
 private:
-	ShapeRectangle moveableArea;
-	int defFriction;
+	ShapeRectangle spawnArea;
+	float defaultWeight;
 	sf::Sprite particleSprite;
 };
 

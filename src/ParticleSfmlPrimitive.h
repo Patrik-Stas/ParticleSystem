@@ -15,7 +15,7 @@
 class ParticleSfmlPrimitive : public Particle
 {
 public:
-	ParticleSfmlPrimitive(float p_ax, float p_ay);
+	ParticleSfmlPrimitive(float p_ax, float p_ay,float p_weight, Color p_color);
 	void paint(sf::RenderWindow* window) ;
 	virtual ~ParticleSfmlPrimitive();
 };

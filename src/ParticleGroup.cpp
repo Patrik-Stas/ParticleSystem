@@ -11,14 +11,13 @@
 #include <math.h>
 
 #include "ParticleGroup.h"
+#include "Constants.h"
 
-#define PI 3.14159265
-
-ParticleGroup::ParticleGroup(ShapeRectangle p_moveableArea, sf::Sprite p_defaultParticleSprite)
+ParticleGroup::ParticleGroup(ShapeRectangle p_spawnArea, float p_defaultWeight, sf::Sprite p_defaultParticleSprite)
 {
-	moveableArea = p_moveableArea;
-	defFriction = 0;
+	spawnArea = p_spawnArea;
 	particleSprite = p_defaultParticleSprite;
+	defaultWeight = p_defaultWeight;
 	srand(time(NULL));
 }
 
@@ -26,17 +25,16 @@ void ParticleGroup::pushSpawnparticles(int p_count)
 {
 	for (int i = 0; i < p_count; i++)
 	{
-		Point pt = moveableArea.getInsidePoint();
+		Point pt = spawnArea.getInsidePoint();
 		pushObject(pt);
 	}
 }
 
 void ParticleGroup::pushObject(Point p_spawnPoint)
 {
-//	Particle* newParticle = Particle::getParticleSfmlPrimitive(p_spawnPoint.x,p_spawnPoint.y  );
-	Particle* newParticle = Particle::getParticleSfmlSprite(p_spawnPoint.x,p_spawnPoint.y, particleSprite  );
-
-	newParticle->setFriction(defFriction);
+//	Particle* newParticle = Particle::getParticleSfmlPrimitive(p_spawnPoint.x,p_spawnPoint.y, defaultWeight );
+	Particle* newParticle = Particle::getParticleSfmlSprite(p_spawnPoint.x, p_spawnPoint.y, defaultWeight,
+			particleSprite);
 	particles.push_back(newParticle);
 }
 
@@ -60,7 +58,7 @@ void ParticleGroup::setRandVect()
 	}
 }
 
-void ParticleGroup::processData(float framerate, Point gravityPoint )
+void ParticleGroup::processData(float framerate)
 {
 	std::list<Particle*>::iterator beginIt = particles.begin();
 	std::list<Particle*>::iterator endIt = particles.end();
@@ -70,19 +68,6 @@ void ParticleGroup::processData(float framerate, Point gravityPoint )
 	{
 		particle = *tmpIt;
 		particle->processData(framerate);
-		float distX = particle->getAx() - gravityPoint.x;
-		float distY = particle->getAy() - gravityPoint.y;
-		float distance = sqrt(distX*distX + distY*distY);
-		float particleMass = 1;
-		float mouseMass = 1000	;
-		float gravitation = 2;
-		float force = gravitation * ( (particleMass * mouseMass) / (distance*distance) );
-		float angle = atan2(distY, distX) * 180 / PI;
-		float pushX = cos(angle*PI/180) * force;
-		float pushY = sin(angle*PI/180) * force;
-		particle->pushXY(-pushX, -pushY);
-		//if (!moveableArea.isInsideX(particle->getAx())) particle->invertVectorX();
-		//if (!moveableArea.isInsideY(particle->getAy())) particle->invertVectorY();
 	}
 }
 

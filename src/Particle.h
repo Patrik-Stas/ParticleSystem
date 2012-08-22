@@ -13,6 +13,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Point.h"
+#include "Color.h"
 
 #define PI 3.14159265
 
@@ -25,7 +26,7 @@ enum PARTICLE_TYPE
 class Particle
 {
 public:
-	Particle (float p_ax, float p_ay);
+	Particle (float p_ax, float p_ay, float p_weight, Color p_color);
 	virtual ~Particle();
 
     void setPosition(float p_ax, float p_ay) {ax=p_ax; ay=p_ay;};
@@ -47,19 +48,25 @@ public:
     float getAy() const        {return ay;};
     float getLastAx() const    {return lastAX;};
     float getLastAy() const    {return lastAY;};
+    float getWeight() const    {return weight;};
+    void  setWeight(float p_weight)    {weight = p_weight;};
 
-    float getFriction() const {return friction;};
-    float getVectorX() const  {return vectorX;};
-    float getVectorY() const  {return vectorY;};
+    float getFriction() const  {return friction;};
+    float getVectorX()  const  {return vectorX;};
+    float getVectorY()  const  {return vectorY;};
+    Point getPosition() 	   {return Point(ax, ay);};
+    void  setPosition(const Point& position) {ax = position.x; ay = position.y; };
+    void  stop() 			   {vectorX=0; vectorY=0;};
 
     void processData(float framerate);
     virtual void paint(sf::RenderWindow* window) = 0;
 
-    static Particle* getParticleSfmlPrimitive(float p_ax, float p_ay);
-    static Particle* getParticleSfmlSprite(float p_ax, float p_ay, sf::Sprite p_sprite);
+    static Particle* getParticleSfmlPrimitive(float p_ax, float p_ay, float p_weight, Color p_color = Color());
+    static Particle* getParticleSfmlSprite(float p_ax, float p_ay, float p_weight, sf::Sprite p_sprite, Color p_color = Color());
 
     static void fixDirection ();
 
+    Color color;
 
 private:
     float ax;

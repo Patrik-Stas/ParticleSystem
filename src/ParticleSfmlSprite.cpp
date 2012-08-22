@@ -7,14 +7,15 @@
 
 #include "ParticleSfmlSprite.h"
 
-ParticleSfmlSprite::ParticleSfmlSprite(float p_ax, float p_ay, sf::Sprite p_sprite ) : Particle(p_ax, p_ay)
+ParticleSfmlSprite::ParticleSfmlSprite(float p_ax, float p_ay, float p_weight, sf::Sprite p_sprite, Color p_color) :
+		Particle(p_ax, p_ay, p_weight, p_color)
 {
 	sprite = p_sprite;
 }
 
 void ParticleSfmlSprite::paint(sf::RenderWindow* window)
 {
-	sprite.SetColor(sf::Color(0, 255, 255, 128));
+	sprite.SetColor(sf::Color(color.red, color.green, color.blue, color.alpha));
 	sprite.SetPosition(getAx(), getAy());
 	window->Draw(sprite);
 }

@@ -57,3 +57,14 @@ Point ShapeRectangle::getInsidePoint() const
 {
 	return Point(rx + rand() % width, ry + rand() % height);
 }
+
+
+Point ShapeRectangle::getClosestInsidePoint(Point p_pt) const
+{
+	Point retPt(p_pt);
+	if (p_pt.y <= ry)  retPt.y = ry + 5;
+	else if (p_pt.y > (ry + height)) retPt.y = (ry + height) - 5;
+	if (p_pt.x <= rx)  retPt.x = rx + 5;
+	else if (p_pt.x > (rx + width)) retPt.x = (rx + width) - 5 ;
+	return retPt;
+}

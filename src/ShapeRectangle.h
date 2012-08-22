@@ -21,6 +21,7 @@ public:
 	bool isInsideX(float p_x) const;
 	bool isInsideY(float p_y) const;
 	Point getInsidePoint() const;
+	Point getClosestInsidePoint(Point p_pt) const;
 	virtual ~ShapeRectangle();
 	int rx;
 	int ry;

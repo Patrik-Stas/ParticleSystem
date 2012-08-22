@@ -10,10 +10,12 @@
 #include "ParticleSfmlPrimitive.h"
 #include "ParticleSfmlSprite.h"
 
-Particle::Particle(float p_ax, float p_ay)
+Particle::Particle(float p_ax, float p_ay, float p_weight, Color p_color)
 {
 	lastAX = ax = p_ax;
 	lastAY = ay = p_ay;
+	color = p_color;
+	weight = p_weight;
 }
 Particle::~Particle()
 {
@@ -36,14 +38,14 @@ void Particle::setVectorXY(float p_vectorX, float p_vectorY)
 	vectorY = p_vectorY;
 }
 
-Particle* Particle::getParticleSfmlPrimitive(float p_ax, float p_ay)
+Particle* Particle::getParticleSfmlPrimitive(float p_ax, float p_ay, float p_weight, Color p_color)
 {
-	return new ParticleSfmlPrimitive(p_ax, p_ay);
+	return new ParticleSfmlPrimitive(p_ax, p_ay, p_weight,  p_color);
 }
 
-Particle* Particle::getParticleSfmlSprite(float p_ax, float p_ay, sf::Sprite p_sprite)
+Particle* Particle::getParticleSfmlSprite(float p_ax, float p_ay, float p_weight, sf::Sprite p_sprite, Color p_color)
 {
-	 return new ParticleSfmlSprite(p_ax, p_ay, p_sprite );
+	 return new ParticleSfmlSprite(p_ax, p_ay, p_weight, p_sprite, p_color );
 }
 
 

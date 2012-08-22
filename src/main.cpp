@@ -1,12 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <stdlib.h>
+
 #include "Gradient.h"
 #include "Particle.h"
+#include "ParticleSfmlPrimitive.h"
 #include "ParticleGroup.h"
 #include "ParticleGroupPainter.h"
-
-
-#include <stdlib.h>
+#include "ParticlePhysics.h"
 
 using std::cout;
 using std::endl;
@@ -41,7 +42,6 @@ int testvis_push(float p_speed)
 {
     sf::RenderWindow App(sf::VideoMode(800, 600), "SFML Shapes");
 
-
 	sf::Image Image;
 	if (!Image.LoadFromFile("particle.tga"))
 	{
@@ -49,27 +49,28 @@ int testvis_push(float p_speed)
 	    abort();
 	}
 
+    App.ShowMouseCursor(false); // Hide cursor
+    // Load image and create sprite
+
 	sf::Sprite particleSprite;
 	particleSprite.SetImage(Image);
-	particleSprite.SetScale(0.5f, 0.5f);
+	particleSprite.SetScale(0.3f, 0.3f);
 	Gradient gradient(0, 0, 255);
 	gradient.setSpeed(p_speed);
 	gradient.colors.push_back(Color(255,0,0));
 	gradient.colors.push_back(Color(0,0,255));
-	/*gradient.colors.push_back(Color(0,0,0));
-	gradient.colors.push_back(Color(244,244,112));
-	gradient.colors.push_back(Color(0,0,244));
-	gradient.colors.push_back(Color(1,255,1));*/
 
-	ParticleGroup particleGroup(ShapeRectangle(10,10,10,500),particleSprite );
-	particleGroup.pushSpawnparticles(100);
+	ParticleGroup particleGroup(ShapeRectangle(50,50,50,50), 1, particleSprite );
+	particleGroup.pushSpawnparticles(2500);
 	ParticleGroupPainter particleGroupPainter(&particleGroup, &App);
+	ParticlePhysics particlePhysics(1, ShapeRectangle(10, 10, 240, 250));
 
-	Point mouse(0,0);
+	int gravityPointWeight = 10000;
+	Color gravityPointColor =  Color(0,255,0,255);
+	ParticleSfmlPrimitive gravityPoint(0,0, gravityPointWeight, gravityPointColor);
 
-
-
-
+    sf::Clock Clock;
+    Clock.Reset();
 	while (App.IsOpened())
 	{
 		gradient.shiftColor();
@@ -79,12 +80,19 @@ int testvis_push(float p_speed)
 			if (Event.Type == sf::Event::Closed)
 				App.Close();
 			if (Event.Type == sf::Event::MouseMoved || Event.Type == sf::Event::MouseEntered )
-				mouse = Point(Event.MouseMove.X, Event.MouseMove.Y);
+			{
+				gravityPoint.setPosition(Event.MouseMove.X, Event.MouseMove.Y);
+			}
 		}
 		App.Clear();
-		App.Draw(sf::Shape::Rectangle(0, 0, 600, 350, sf::Color(gradient.red, gradient.green, gradient.blue)));
-		particleGroup.processData(60, mouse);
+
+        float framerate=1/App.GetFrameTime();
+        std::cout << "fps: " << framerate << std::endl;
+		App.Draw(sf::Shape::Rectangle(0, 0, 5, 350, sf::Color(gradient.red, gradient.green, gradient.blue)));
+		particlePhysics.apply(&particleGroup, gravityPoint);
+		particleGroup.processData(framerate);
 		particleGroupPainter.paint();
+		gravityPoint.paint(&App);
 		App.Display();
 	}
 

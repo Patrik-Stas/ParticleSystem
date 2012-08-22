@@ -1,11 +1,21 @@
-#include "Color.h"
 #include <iostream>
 
-Color::Color(int p_red, int p_green, int p_blue)
+#include "Color.h"
+
+Color::Color(int p_red, int p_green, int p_blue, int p_alpha)
 {
 	setRed(p_red);
 	setGreen(p_green);
 	setBlue(p_blue);
+	setAlpha(p_alpha);
+}
+
+Color::Color()
+{
+	setRed(0);
+	setGreen(255);
+	setBlue(0);
+	setAlpha(30);
 }
 
 std::ostream& operator<<(ostream& output, const Color& color)
@@ -23,11 +33,10 @@ float Color::getBlue() const
 	return blue;
 }
 
-void Color::setBlue(float blue)
+void Color::setBlue(int p_blue)
 {
-	blue = (blue > 255) ? 255 : blue;
-	blue = (blue < 0) ? 0 : blue;
-	this->blue = blue;
+	checkColorValue(p_blue);
+	blue = p_blue;
 }
 
 float Color::getGreen() const
@@ -35,12 +44,10 @@ float Color::getGreen() const
 	return green;
 }
 
-void Color::setGreen(float green)
+void Color::setGreen(int p_green)
 {
-
-	green = (green > 255) ? 255 : green;
-	green = (green < 0) ? 0 : green;
-	this->green = green;
+	checkColorValue(p_green);
+	green = p_green;
 }
 
 float Color::getRed() const
@@ -48,16 +55,36 @@ float Color::getRed() const
 	return red;
 }
 
-void Color::setRed(float red)
+void Color::setRed(int p_red)
 {
-	red = (red > 255) ? 255 : red;
-	red = (red < 0) ? 0 : red;
-	this->red = red;
+	checkColorValue(p_red);
+	red = p_red;
+}
+
+void Color::setAlpha(int p_alpha)
+{
+	checkColorValue(p_alpha);
+	alpha = p_alpha;
+}
+
+float Color::getAlpha() const
+{
+	return alpha;
+}
+
+
+void Color::checkColorValue(int& p_colorVal)
+{
+	p_colorVal = (p_colorVal > 255) ? 255 : p_colorVal;
+	p_colorVal = (p_colorVal < 0) ? 0 : p_colorVal;
 }
 
 bool Color::operator==(Color& c1)
 {
-	if ((int) red == (int) c1.red && (int) green == (int) c1.green && (int) blue == (int) c1.blue)
+	if (	(int) red   == (int) c1.red   &&
+			(int) green == (int) c1.green &&
+			(int) blue  == (int) c1.blue  &&
+			(int) alpha == (int) c1.alpha   )
 		return true;
 	else
 		return false;
@@ -67,3 +94,4 @@ bool Color::operator!=(Color& c1)
 {
 	return !(*this == c1);
 }
+

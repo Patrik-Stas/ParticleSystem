@@ -14,6 +14,8 @@ public:
 	Point(float p_x, float p_y);
 	float x;
 	float y;
+	bool operator==(const Point& pt) const;
+	bool operator!=(const Point& pt) const;
 };
 
 #endif /* POINT_H_ */
