@@ -15,7 +15,7 @@ Color::Color()
 	setRed(0);
 	setGreen(255);
 	setBlue(0);
-	setAlpha(30);
+	setAlpha(50);
 }
 
 std::ostream& operator<<(ostream& output, const Color& color)

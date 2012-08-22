@@ -9,8 +9,8 @@ all: compile
 
 compile: $(NM)
 
-$(NM): main.o Color.o Gradient.o Particle.o ParticleGroup.o ParticleGroupPainter.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o
-	$(LD) -o $(NM) main.o Color.o Gradient.o Particle.o ParticleGroup.o ParticleGroupPainter.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o $(LIBS)
+$(NM): main.o Color.o Gradient.o Particle.o ParticleGroup.o ParticleGroupPainter.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o
+	$(LD) -o $(NM) main.o Color.o Gradient.o Particle.o ParticleGroup.o ParticleGroupPainter.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o  $(LIBS)
 
 main.o: $(SRC)/main.cpp $(SRC)/Color.h  $(SRC)/Gradient.h 
 	$(CXX) $(CFLAGS) -c -o $@ $<
@@ -44,9 +44,7 @@ ParticleSfmlPrimitive.o: $(SRC)/ParticleSfmlPrimitive.cpp $(SRC)/ParticleSfmlPri
 
 ParticleSfmlSprite.o: $(SRC)/ParticleSfmlSprite.cpp $(SRC)/ParticleSfmlSprite.h $(SRC)/Particle.h
 	$(CXX) $(CFLAGS) -c -o $@ $<
-	
-ParticlePhysics.o: $(SRC)/ParticlePhysics.cpp $(SRC)/ParticlePhysics.h $(SRC)/ParticleGroup.h $(SRC)/Particle.h
-	$(CXX) $(CFLAGS) -c -o $@ $<	
+		
 	
 clean:
 	rm -f *.o $(NM)

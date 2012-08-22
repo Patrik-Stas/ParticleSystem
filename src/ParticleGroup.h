@@ -20,7 +20,8 @@ public:
 	ParticleGroup();
 	list<Particle*> particles;
 
-	ParticleGroup(ShapeRectangle p_spawnArea, float p_defaultWeight, sf::Sprite p_defaultSprite );
+	ParticleGroup(ShapeRectangle p_spawnArea, ShapeRectangle p_moveableArea, float p_defaultWeight,
+			sf::Sprite p_defaultSprite);
 	~ParticleGroup();
 
 	void pushSpawnparticles(int p_count);
@@ -28,9 +29,13 @@ public:
 	void pushObject(Particle* object);
 	void setRandVect();
 	void processData(float framerate);
+	void applyPhysics(const int gravity, const Particle& gravityPoint);
+	void respawn(std::list<Particle*>::iterator particle, Shape* shape);
+	int getParticleCount();
 
 private:
 	ShapeRectangle spawnArea;
+	ShapeRectangle moveableArea;
 	float defaultWeight;
 	sf::Sprite particleSprite;
 };

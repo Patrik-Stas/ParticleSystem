@@ -13,8 +13,10 @@
 #include "ParticleGroup.h"
 #include "Constants.h"
 
-ParticleGroup::ParticleGroup(ShapeRectangle p_spawnArea, float p_defaultWeight, sf::Sprite p_defaultParticleSprite)
+ParticleGroup::ParticleGroup(ShapeRectangle p_spawnArea, ShapeRectangle p_moveableArea, float p_defaultWeight,
+		sf::Sprite p_defaultParticleSprite)
 {
+	moveableArea = p_moveableArea;
 	spawnArea = p_spawnArea;
 	particleSprite = p_defaultParticleSprite;
 	defaultWeight = p_defaultWeight;
@@ -69,6 +71,49 @@ void ParticleGroup::processData(float framerate)
 		particle = *tmpIt;
 		particle->processData(framerate);
 	}
+}
+
+void ParticleGroup::respawn(std::list<Particle*>::iterator particle, Shape* shape)
+{
+	(*particle)->setPosition(shape->getInsidePoint());
+	(*particle)->stop();
+}
+
+void ParticleGroup::applyPhysics(const int gravitation, const Particle& gravityPoint)
+{
+	std::list<Particle*>::iterator beginIt = particles.begin();
+	std::list<Particle*>::iterator endIt = particles.end();
+	std::list<Particle*>::iterator tmpIt;
+	Particle * particle = NULL;
+	for (tmpIt = beginIt; tmpIt != endIt; tmpIt++)
+	{
+		particle = *tmpIt;
+		float distX = particle->getAx() - gravityPoint.getAx();
+		float distY = particle->getAy() - gravityPoint.getAy();
+		float distance = sqrt(distX * distX + distY * distY);
+		float force = gravitation * ((particle->getWeight() * gravityPoint.getWeight()) / (distance * distance));
+		float angle = atan2(distY, distX) * 180 / PI;
+		float pushX = cos(angle * PI / 180) * force;
+		float pushY = sin(angle * PI / 180) * force - 1 * gravitation;
+		particle->pushXY(-pushX, -pushY);
+		Point particlePosition = particle->getPosition();
+		Point closesInsidePosition = moveableArea.getClosestInsidePoint(particlePosition);
+		/*	if (particlePosition != closesInsidePosition)
+		 {
+		 particle->stop();
+		 particle->setPosition(closesInsidePosition);
+		 }*/
+		if (particlePosition != closesInsidePosition)
+		{
+			//tmpIt = particles.erase(tmpIt);
+			respawn(tmpIt, &spawnArea);
+		}
+	}
+}
+
+int ParticleGroup::getParticleCount()
+{
+	return particles.size();
 }
 
 ParticleGroup::~ParticleGroup()
