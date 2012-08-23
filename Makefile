@@ -2,7 +2,7 @@ CXX=g++
 LD=g++
 SRC=src
 CFLAGS=-Wall -pedantic -O3
-LIBS=-lsfml-graphics -lsfml-system -lsfml-window
+LIBS=-lsfml-graphics -lsfml-system -lsfml-window -ltgui
 	
 NM=ParticleSystem
 all: compile 

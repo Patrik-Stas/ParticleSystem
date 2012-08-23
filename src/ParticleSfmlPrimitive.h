@@ -18,6 +18,10 @@ public:
 	ParticleSfmlPrimitive(float p_ax, float p_ay,float p_weight, Color p_color);
 	void paint(sf::RenderWindow* window) ;
 	virtual ~ParticleSfmlPrimitive();
+
+private:
+	sf::ConvexShape polygon;
+	sf::CircleShape circle;
 };
 
 #endif /* PARTCILESFMLPRIMITIVE_H_ */
