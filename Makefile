@@ -9,8 +9,8 @@ all: compile
 
 compile: $(NM)
 
-$(NM): main.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o ParticleGroupPainter.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o
-	$(LD) -o $(NM) main.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o ParticleGroupPainter.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o $(LIBS)
+$(NM): main.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o ParticleGroupPainter.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o
+	$(LD) -o $(NM) main.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o ParticleGroupPainter.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o $(LIBS)
 
 main.o: $(SRC)/main.cpp $(SRC)/ParticleSystem.h 
 	$(CXX) $(CFLAGS) -c -o $@ $<
@@ -40,6 +40,12 @@ Shape.o: $(SRC)/Shape.cpp $(SRC)/Shape.h
 	$(CXX) $(CFLAGS) -c -o $@ $<
 
 ShapeRectangle.o: $(SRC)/ShapeRectangle.cpp $(SRC)/ShapeRectangle.h $(SRC)/Shape.h 
+	$(CXX) $(CFLAGS) -c -o $@ $<
+	
+ShapeCircle.o: $(SRC)/ShapeCircle.cpp $(SRC)/ShapeCircle.h $(SRC)/Shape.h 
+	$(CXX) $(CFLAGS) -c -o $@ $<
+	
+Emitter.o: $(SRC)/Emitter.cpp $(SRC)/Emitter.h $(SRC)/ShapeCircle.cpp $(SRC)/ShapeCircle.h $(SRC)/Shape.h 
 	$(CXX) $(CFLAGS) -c -o $@ $<
 
 Point.o: $(SRC)/Point.cpp $(SRC)/Point.h 

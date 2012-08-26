@@ -13,12 +13,13 @@
 #include "ParticleGroup.h"
 #include "Constants.h"
 
-ParticleGroup::ParticleGroup(ParticlePhysics* p_particlePhysics, ShapeRectangle p_spawnArea,
-		ShapeRectangle p_moveableArea, float p_defaultWeight, float p_defaultScaledSize, sf::Sprite p_defaultParticleSprite)
+ParticleGroup::ParticleGroup(ParticlePhysics* p_particlePhysics,
+		Shape* p_moveableArea, Emitter* p_emitter, float p_defaultWeight, float p_defaultScaledSize,
+		sf::Sprite p_defaultParticleSprite)
 {
+	emitter = p_emitter;
 	particlePhysics = p_particlePhysics;
 	moveableArea = p_moveableArea;
-	spawnArea = p_spawnArea;
 	particleSprite = p_defaultParticleSprite;
 	defaultWeight = p_defaultWeight;
 	defaultScaledSize = p_defaultScaledSize;
@@ -28,16 +29,16 @@ ParticleGroup::ParticleGroup(ParticlePhysics* p_particlePhysics, ShapeRectangle 
 void ParticleGroup::setParticlesCount(int p_newSize)
 {
 	int actualSize = particles.size();
-	(p_newSize > actualSize) ?  addParticles(p_newSize - actualSize ) : removeParticles(actualSize-p_newSize);
+	(p_newSize > actualSize) ? addParticles(p_newSize - actualSize) : removeParticles(actualSize - p_newSize);
 }
-
 
 void ParticleGroup::addParticles(int p_count)
 {
 	for (int i = 0; i < p_count; i++)
 	{
-		Point pt = spawnArea.getInsidePoint();
+		Point pt = emitter->emitPosition();
 		addParticleAt(pt);
+		std::cout << pt;
 	}
 }
 
@@ -61,9 +62,9 @@ void ParticleGroup::addParticle(Particle* object)
 
 void ParticleGroup::setScaledSize(float p_scaledSize)
 {
-	 std::for_each(particles.begin(), particles.end(),
-			    std::bind2nd(std::mem_fun(&Particle::setScaledSize), p_scaledSize));
-	 defaultScaledSize = p_scaledSize;
+	std::for_each(particles.begin(), particles.end(),
+			std::bind2nd(std::mem_fun(&Particle::setScaledSize), p_scaledSize));
+	defaultScaledSize = p_scaledSize;
 }
 
 void ParticleGroup::setRandVect()
@@ -83,14 +84,15 @@ void ParticleGroup::setRandVect()
 
 void ParticleGroup::processData(float framerate)
 {
-	 std::for_each(particles.begin(), particles.end(),
-			    std::bind2nd(std::mem_fun(&Particle::processData), framerate));
+	std::for_each(particles.begin(), particles.end(), std::bind2nd(std::mem_fun(&Particle::processData), framerate));
 }
 
 void ParticleGroup::respawn(std::list<Particle*>::iterator particle, Shape* shape)
 {
-	(*particle)->setPosition(shape->getInsidePoint());
-	(*particle)->stop();
+
+//emitter.getVector();
+//	(*particle)->setPosition(emitter.getPoint());
+//	(*particle)->setVectorXY(emitter.getVector());
 }
 
 void ParticleGroup::applyPhysics()
@@ -104,18 +106,29 @@ void ParticleGroup::applyPhysics()
 		particle = *tmpIt;
 		particlePhysics->applyGravityPoint(particle);
 		particlePhysics->applyDownForce(particle);
+	}
+}
+
+void ParticleGroup::checkBounds()
+{
+	std::list<Particle*>::iterator beginIt = particles.begin();
+	std::list<Particle*>::iterator endIt = particles.end();
+	std::list<Particle*>::iterator tmpIt;
+	Particle * particle = NULL;
+	for (tmpIt = beginIt; tmpIt != endIt; tmpIt++)
+	{
 		Point particlePosition = particle->getPosition();
-		Point closesInsidePosition = moveableArea.getClosestInsidePoint(particlePosition);
+		Point closesInsidePosition = moveableArea->getClosestInsidePoint(particlePosition);
 			if (particlePosition != closesInsidePosition)
 		 {
 		 particle->stop();
 		 particle->setPosition(closesInsidePosition);
 		 }
-	/*	if (particlePosition != closesInsidePosition)
+		/*if (particlePosition != closesInsidePosition)
 		{
 			//tmpIt = particles.erase(tmpIt);
 			respawn(tmpIt, &spawnArea);
-		} */
+		}*/
 	}
 }
 

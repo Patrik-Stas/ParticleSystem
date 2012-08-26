@@ -8,6 +8,8 @@
 #ifndef POINT_H_
 #define POINT_H_
 
+#include <iostream>
+
 class Point
 {
 public:
@@ -16,6 +18,8 @@ public:
 	float y;
 	bool operator==(const Point& pt) const;
 	bool operator!=(const Point& pt) const;
+
+	friend std::ostream& operator<<( std::ostream& ostr, const Point& pt);
 };
 
 #endif /* POINT_H_ */

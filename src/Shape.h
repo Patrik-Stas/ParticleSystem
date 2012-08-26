@@ -13,11 +13,15 @@
 class Shape
 {
 public:
-	Shape();
+	Shape(Point pt);
+    void setLocation(Point pt);
 	virtual bool isInside(Point p_pt) const = 0;
 	virtual Point getInsidePoint() const = 0;
 	virtual Point getClosestInsidePoint(Point p_pt) const = 0;
 	virtual ~Shape();
+protected:
+	float x;
+	float y;
 };
 
 #endif /* SHAPE_H_ */

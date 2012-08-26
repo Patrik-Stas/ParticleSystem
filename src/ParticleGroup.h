@@ -12,6 +12,7 @@
 #include "Particle.h"
 #include "ShapeRectangle.h"
 #include "ParticlePhysics.h"
+#include "Emitter.h"
 
 using std::list;
 
@@ -21,7 +22,7 @@ public:
 	ParticleGroup();
 	list<Particle*> particles;
 
-	ParticleGroup(ParticlePhysics* p_particlePhysics, ShapeRectangle p_spawnArea, ShapeRectangle p_moveableArea, float p_defaultWeight,
+	ParticleGroup(ParticlePhysics* p_particlePhysics, Shape* p_moveableArea, Emitter* p_emitter, float p_defaultWeight,
 			float p_defaultScaledSize, sf::Sprite p_defaultSprite);
 	~ParticleGroup();
 	void setParticlesCount(int p_count);
@@ -32,14 +33,15 @@ public:
 	void setRandVect();
 	void processData(float framerate);
 	void applyPhysics();
+	void checkBounds();
 	void respawn(std::list<Particle*>::iterator particle, Shape* shape);
 	int getParticleCount();
 	void setScaledSize(float p_scaledSize);
 
 private:
 	ParticlePhysics* particlePhysics;
-	ShapeRectangle spawnArea;
-	ShapeRectangle moveableArea;
+	Shape* moveableArea;
+	Emitter* emitter;
 	float defaultWeight;
 	sf::Sprite particleSprite;
 	float defaultScaledSize;

@@ -8,22 +8,14 @@
 #include "ShapeRectangle.h"
 #include <stdlib.h>
 
-ShapeRectangle::ShapeRectangle()
-{
-}
 
-ShapeRectangle::ShapeRectangle(int p_rx, int p_ry, int p_width, int p_height)
-{
-	initialize(p_rx, p_ry, p_width, p_height);
-}
 
-void ShapeRectangle::initialize(int p_rx, int p_ry, int p_width, int p_height)
+ShapeRectangle::ShapeRectangle(Point p_pt, int p_width, int p_height) : Shape(p_pt)
 {
-	rx = p_rx;
-	ry = p_ry;
 	width = p_width;
 	height = p_height;
 }
+
 
 ShapeRectangle::~ShapeRectangle()
 {
@@ -31,7 +23,7 @@ ShapeRectangle::~ShapeRectangle()
 
 bool ShapeRectangle::isInsideX(float p_x) const
 {
-	if (p_x >= rx && p_x <= (rx + width) )
+	if (p_x >= x && p_x <= (x + width) )
 		return true;
 	else
 		return false;
@@ -39,7 +31,7 @@ bool ShapeRectangle::isInsideX(float p_x) const
 
 bool ShapeRectangle::isInsideY(float p_y) const
 {
-	if ( p_y >= ry && p_y < (ry + height))
+	if ( p_y >= y && p_y < (y + height))
 		return true;
 	else
 		return false;
@@ -55,16 +47,18 @@ bool ShapeRectangle::isInside(Point p_pt) const
 
 Point ShapeRectangle::getInsidePoint() const
 {
-	return Point(rx + rand() % width, ry + rand() % height);
+	return Point(x + rand() % width, y + rand() % height);
 }
 
 
 Point ShapeRectangle::getClosestInsidePoint(Point p_pt) const
 {
 	Point retPt(p_pt);
-	if (p_pt.y <= ry)  retPt.y = ry + 5;
-	else if (p_pt.y > (ry + height)) retPt.y = (ry + height) - 5;
-	if (p_pt.x <= rx)  retPt.x = rx + 5;
-	else if (p_pt.x > (rx + width)) retPt.x = (rx + width) - 5 ;
+	if (p_pt.y <= y)  retPt.y = y + 5;
+	else if (p_pt.y > (y + height)) retPt.y = (y + height) - 5;
+	if (p_pt.x <= x)  retPt.x = x + 5;
+	else if (p_pt.x > (x + width)) retPt.x = (x + width) - 5 ;
 	return retPt;
 }
+
+

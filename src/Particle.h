@@ -33,6 +33,7 @@ public:
     void setVectorX    (float p_vectorX)     {vectorX = p_vectorX;};
     void setVectorY    (float p_vectorY)     {vectorY = p_vectorY;};
     void setVectorXY   (float p_vectorX, float p_vectorY);
+    void setVectorXY   (Point pt) {vectorX = pt.x; vectorY = pt.y;};
 
     void pushX(float p_vectorX) { vectorX+=p_vectorX; }
     void pushY(float p_vectorY) { vectorY+=p_vectorY; }

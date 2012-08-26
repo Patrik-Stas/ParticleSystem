@@ -23,3 +23,10 @@ bool Point::operator!=(const Point& pt) const
 {
 	return !((*this) == pt );
 }
+
+
+std::ostream& operator<<( std::ostream& ostr, const Point& pt)
+{
+	ostr << "x: " << pt.x << "   y:" << pt.y << "\n";
+	return ostr;
+}

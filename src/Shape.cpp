@@ -7,14 +7,18 @@
 
 #include "Shape.h"
 
-Shape::Shape()
+Shape::Shape(Point p_pt)
 {
-	// TODO Auto-generated constructor stub
+	setLocation(p_pt);
+}
 
+void Shape::setLocation(Point p_pt)
+{
+	x = p_pt.x;
+	y = p_pt.y;
 }
 
 Shape::~Shape()
 {
-	// TODO Auto-generated destructor stub
 }
 
