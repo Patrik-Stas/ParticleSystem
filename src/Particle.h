@@ -30,7 +30,6 @@ public:
 
     void setPosition(float p_ax, float p_ay) {ax=p_ax; ay=p_ay;};
 
-    void setFriction   (float p_friction)    {friction = p_friction;};
     void setVectorX    (float p_vectorX)     {vectorX = p_vectorX;};
     void setVectorY    (float p_vectorY)     {vectorY = p_vectorY;};
     void setVectorXY   (float p_vectorX, float p_vectorY);
@@ -45,12 +44,9 @@ public:
 
     float getAx() const        {return ax;};
     float getAy() const        {return ay;};
-    float getLastAx() const    {return lastAX;};
-    float getLastAy() const    {return lastAY;};
     float getWeight() const    {return weight;};
     void  setWeight(float p_weight)    {weight = p_weight;};
 
-    float getFriction() const  {return friction;};
     float getVectorX()  const  {return vectorX;};
     float getVectorY()  const  {return vectorY;};
     Point getPosition() 	   {return Point(ax, ay);};
@@ -72,12 +68,9 @@ public:
 private:
     float ax;
     float ay;
-    float lastAX;
-    float lastAY;
 
     float vectorX;
     float vectorY;
-    float friction;
     float weight;
 
 protected:

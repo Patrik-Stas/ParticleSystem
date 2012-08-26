@@ -12,11 +12,12 @@
 
 Particle::Particle(float p_ax, float p_ay, float p_weight, float p_scaledSize, Color p_color)
 {
-	lastAX = ax = p_ax;
-	lastAY = ay = p_ay;
+	ax = p_ax;
+	ay = p_ay;
 	color = p_color;
 	weight = p_weight;
 	scaledSize = p_scaledSize;
+	vectorX = vectorY = 0;
 }
 Particle::~Particle()
 {
@@ -25,9 +26,6 @@ Particle::~Particle()
 void Particle::processData(float framerate)
 {
     float fpsRatio=1/framerate;
-
-    lastAX=ax;
-    lastAY=ay;
 
     ax+=fpsRatio*vectorX; // -direction, because of [0,0] point in computer cartesian system is in top left point
     ay+=fpsRatio*vectorY;

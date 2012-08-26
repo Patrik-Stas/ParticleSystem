@@ -13,43 +13,57 @@
 #include "ParticleGroup.h"
 #include "Constants.h"
 
-ParticleGroup::ParticleGroup(ParticlePhysics* p_particlePhysics, ShapeRectangle p_spawnArea, ShapeRectangle p_moveableArea, float p_defaultWeight,
-		sf::Sprite p_defaultParticleSprite)
+ParticleGroup::ParticleGroup(ParticlePhysics* p_particlePhysics, ShapeRectangle p_spawnArea,
+		ShapeRectangle p_moveableArea, float p_defaultWeight, float p_defaultScaledSize, sf::Sprite p_defaultParticleSprite)
 {
 	particlePhysics = p_particlePhysics;
 	moveableArea = p_moveableArea;
 	spawnArea = p_spawnArea;
 	particleSprite = p_defaultParticleSprite;
 	defaultWeight = p_defaultWeight;
+	defaultScaledSize = p_defaultScaledSize;
 	srand(time(NULL));
 }
 
-void ParticleGroup::pushSpawnparticles(int p_count)
+void ParticleGroup::setParticlesCount(int p_newSize)
+{
+	int actualSize = particles.size();
+	(p_newSize > actualSize) ?  addParticles(p_newSize - actualSize ) : removeParticles(actualSize-p_newSize);
+}
+
+
+void ParticleGroup::addParticles(int p_count)
 {
 	for (int i = 0; i < p_count; i++)
 	{
 		Point pt = spawnArea.getInsidePoint();
-		pushObject(pt);
+		addParticleAt(pt);
 	}
 }
 
-void ParticleGroup::pushObject(Point p_spawnPoint)
+void ParticleGroup::removeParticles(int p_count)
+{
+	particles.resize(p_count);
+}
+
+void ParticleGroup::addParticleAt(Point p_spawnPoint)
 {
 	//Particle* newParticle = Particle::getParticleSfmlPrimitive(p_spawnPoint.x,p_spawnPoint.y, defaultWeight, 1, 1 );
 	Particle* newParticle = Particle::getParticleSfmlSprite(p_spawnPoint.x, p_spawnPoint.y, defaultWeight,
-			particleSprite, 0.1);
+			particleSprite, defaultScaledSize);
 	particles.push_back(newParticle);
 }
 
-void ParticleGroup::pushObject(Particle* object)
+void ParticleGroup::addParticle(Particle* object)
 {
 	particles.push_back(object);
 }
 
-
-void ParticleGroup::setScaledSize()
+void ParticleGroup::setScaledSize(float p_scaledSize)
 {
-
+	 std::for_each(particles.begin(), particles.end(),
+			    std::bind2nd(std::mem_fun(&Particle::setScaledSize), p_scaledSize));
+	 defaultScaledSize = p_scaledSize;
 }
 
 void ParticleGroup::setRandVect()
@@ -88,7 +102,8 @@ void ParticleGroup::applyPhysics()
 	for (tmpIt = beginIt; tmpIt != endIt; tmpIt++)
 	{
 		particle = *tmpIt;
-		particlePhysics->apply(particle);
+		particlePhysics->applyGravityPoint(particle);
+		particlePhysics->applyDownForce(particle);
 		Point particlePosition = particle->getPosition();
 		Point closesInsidePosition = moveableArea.getClosestInsidePoint(particlePosition);
 			if (particlePosition != closesInsidePosition)
@@ -100,7 +115,7 @@ void ParticleGroup::applyPhysics()
 		{
 			//tmpIt = particles.erase(tmpIt);
 			respawn(tmpIt, &spawnArea);
-		}*/
+		} */
 	}
 }
 
