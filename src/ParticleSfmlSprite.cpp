@@ -7,10 +7,17 @@
 
 #include "ParticleSfmlSprite.h"
 
-ParticleSfmlSprite::ParticleSfmlSprite(float p_ax, float p_ay, float p_weight, sf::Sprite p_sprite, Color p_color) :
-		Particle(p_ax, p_ay, p_weight, p_color)
+ParticleSfmlSprite::ParticleSfmlSprite(float p_ax, float p_ay, float p_weight, sf::Sprite p_sprite, float p_scaledSize, Color p_color) :
+		Particle(p_ax, p_ay, p_weight, p_scaledSize, p_color)
 {
 	sprite = p_sprite;
+	sprite.setScale(scaledSize, scaledSize);
+}
+
+void ParticleSfmlSprite::setScaledSize(float p_scaledSize)
+{
+	scaledSize = p_scaledSize;
+	sprite.setScale(scaledSize, scaledSize);
 }
 
 void ParticleSfmlSprite::paint(sf::RenderWindow* window)

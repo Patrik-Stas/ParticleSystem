@@ -13,7 +13,8 @@
 class ParticleSfmlSprite : public Particle
 {
 public:
-	ParticleSfmlSprite(float p_ax, float p_ay, float p_weight, sf::Sprite p_sprite, Color p_color);
+	ParticleSfmlSprite(float p_ax, float p_ay, float p_weight, sf::Sprite p_sprite, float p_scaledRadius, Color p_color);
+	void setScaledSize(float p_scaledSize);
 	void paint(sf::RenderWindow* window);
 	virtual ~ParticleSfmlSprite();
 private:

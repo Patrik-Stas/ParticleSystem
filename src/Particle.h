@@ -14,8 +14,7 @@
 
 #include "Point.h"
 #include "Color.h"
-
-#define PI 3.14159265
+#include "Constants.h"
 
 enum PARTICLE_TYPE
 {
@@ -26,7 +25,7 @@ enum PARTICLE_TYPE
 class Particle
 {
 public:
-	Particle (float p_ax, float p_ay, float p_weight, Color p_color);
+	Particle (float p_ax, float p_ay, float p_weight, float scaledRadius, Color p_color);
 	virtual ~Particle();
 
     void setPosition(float p_ax, float p_ay) {ax=p_ax; ay=p_ay;};
@@ -60,9 +59,11 @@ public:
 
     void processData(float framerate);
     virtual void paint(sf::RenderWindow* window) = 0;
+    virtual void setScaledSize(float p_scaledSize) = 0;
+    float getScale() {return scaledSize;};
 
-    static Particle* getParticleSfmlPrimitive(float p_ax, float p_ay, float p_weight, Color p_color = Color());
-    static Particle* getParticleSfmlSprite(float p_ax, float p_ay, float p_weight, sf::Sprite p_sprite, Color p_color = Color());
+    static Particle* getParticleSfmlPrimitive(float p_ax, float p_ay, float p_weight, int maximalRadius, float scaledRadius, Color p_color = Color());
+    static Particle* getParticleSfmlSprite(float p_ax, float p_ay, float p_weight,  sf::Sprite p_sprite, float scaledRadius, Color p_color = Color());
 
     static void fixDirection ();
 
@@ -78,6 +79,9 @@ private:
     float vectorY;
     float friction;
     float weight;
+
+protected:
+    float scaledSize; // 1 = normal size
 };
 
 #endif /* PARTICLE_H_ */

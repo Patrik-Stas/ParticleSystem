@@ -11,6 +11,7 @@
 #include <list>
 #include "Particle.h"
 #include "ShapeRectangle.h"
+#include "ParticlePhysics.h"
 
 using std::list;
 
@@ -20,7 +21,7 @@ public:
 	ParticleGroup();
 	list<Particle*> particles;
 
-	ParticleGroup(ShapeRectangle p_spawnArea, ShapeRectangle p_moveableArea, float p_defaultWeight,
+	ParticleGroup(ParticlePhysics* p_particlePhysics, ShapeRectangle p_spawnArea, ShapeRectangle p_moveableArea, float p_defaultWeight,
 			sf::Sprite p_defaultSprite);
 	~ParticleGroup();
 
@@ -29,11 +30,13 @@ public:
 	void pushObject(Particle* object);
 	void setRandVect();
 	void processData(float framerate);
-	void applyPhysics(const float gravity, const Particle& gravityPoint);
+	void applyPhysics();
 	void respawn(std::list<Particle*>::iterator particle, Shape* shape);
 	int getParticleCount();
+	void setScaledSize();
 
 private:
+	ParticlePhysics* particlePhysics;
 	ShapeRectangle spawnArea;
 	ShapeRectangle moveableArea;
 	float defaultWeight;

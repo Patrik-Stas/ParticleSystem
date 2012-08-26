@@ -13,9 +13,10 @@
 #include "ParticleGroup.h"
 #include "Constants.h"
 
-ParticleGroup::ParticleGroup(ShapeRectangle p_spawnArea, ShapeRectangle p_moveableArea, float p_defaultWeight,
+ParticleGroup::ParticleGroup(ParticlePhysics* p_particlePhysics, ShapeRectangle p_spawnArea, ShapeRectangle p_moveableArea, float p_defaultWeight,
 		sf::Sprite p_defaultParticleSprite)
 {
+	particlePhysics = p_particlePhysics;
 	moveableArea = p_moveableArea;
 	spawnArea = p_spawnArea;
 	particleSprite = p_defaultParticleSprite;
@@ -34,15 +35,21 @@ void ParticleGroup::pushSpawnparticles(int p_count)
 
 void ParticleGroup::pushObject(Point p_spawnPoint)
 {
-//	Particle* newParticle = Particle::getParticleSfmlPrimitive(p_spawnPoint.x,p_spawnPoint.y, defaultWeight );
+	//Particle* newParticle = Particle::getParticleSfmlPrimitive(p_spawnPoint.x,p_spawnPoint.y, defaultWeight, 1, 1 );
 	Particle* newParticle = Particle::getParticleSfmlSprite(p_spawnPoint.x, p_spawnPoint.y, defaultWeight,
-			particleSprite);
+			particleSprite, 0.1);
 	particles.push_back(newParticle);
 }
 
 void ParticleGroup::pushObject(Particle* object)
 {
 	particles.push_back(object);
+}
+
+
+void ParticleGroup::setScaledSize()
+{
+
 }
 
 void ParticleGroup::setRandVect()
@@ -62,15 +69,8 @@ void ParticleGroup::setRandVect()
 
 void ParticleGroup::processData(float framerate)
 {
-	std::list<Particle*>::iterator beginIt = particles.begin();
-	std::list<Particle*>::iterator endIt = particles.end();
-	std::list<Particle*>::iterator tmpIt;
-	Particle * particle = NULL;
-	for (tmpIt = beginIt; tmpIt != endIt; tmpIt++)
-	{
-		particle = *tmpIt;
-		particle->processData(framerate);
-	}
+	 std::for_each(particles.begin(), particles.end(),
+			    std::bind2nd(std::mem_fun(&Particle::processData), framerate));
 }
 
 void ParticleGroup::respawn(std::list<Particle*>::iterator particle, Shape* shape)
@@ -79,7 +79,7 @@ void ParticleGroup::respawn(std::list<Particle*>::iterator particle, Shape* shap
 	(*particle)->stop();
 }
 
-void ParticleGroup::applyPhysics(const float gravitation, const Particle& gravityPoint)
+void ParticleGroup::applyPhysics()
 {
 	std::list<Particle*>::iterator beginIt = particles.begin();
 	std::list<Particle*>::iterator endIt = particles.end();
@@ -88,26 +88,19 @@ void ParticleGroup::applyPhysics(const float gravitation, const Particle& gravit
 	for (tmpIt = beginIt; tmpIt != endIt; tmpIt++)
 	{
 		particle = *tmpIt;
-		float distX = particle->getAx() - gravityPoint.getAx();
-		float distY = particle->getAy() - gravityPoint.getAy();
-		float distance = sqrt(distX * distX + distY * distY);
-		float force = gravitation * ((particle->getWeight() * gravityPoint.getWeight()) / (distance * distance));
-		float angle = atan2(distY, distX) * 180 / PI;
-		float pushX = cos(angle * PI / 180) * force;
-		float pushY = sin(angle * PI / 180) * force - 1 * gravitation;
-		particle->pushXY(-pushX, -pushY);
+		particlePhysics->apply(particle);
 		Point particlePosition = particle->getPosition();
 		Point closesInsidePosition = moveableArea.getClosestInsidePoint(particlePosition);
-		/*	if (particlePosition != closesInsidePosition)
+			if (particlePosition != closesInsidePosition)
 		 {
 		 particle->stop();
 		 particle->setPosition(closesInsidePosition);
-		 }*/
-		if (particlePosition != closesInsidePosition)
+		 }
+	/*	if (particlePosition != closesInsidePosition)
 		{
 			//tmpIt = particles.erase(tmpIt);
 			respawn(tmpIt, &spawnArea);
-		}
+		}*/
 	}
 }
 
