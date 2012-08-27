@@ -16,15 +16,24 @@
 
 using std::list;
 
+enum BOUND_ACTION
+{
+	bound_stop,
+	bound_mirror_port,
+	bound_respawn,
+	bound_kill
+};
+
 class ParticleGroup
 {
 public:
 	ParticleGroup();
 	list<Particle*> particles;
 
-	ParticleGroup(ParticlePhysics* p_particlePhysics, Shape* p_moveableArea, Emitter* p_emitter, float p_defaultWeight,
-			float p_defaultScaledSize, sf::Sprite p_defaultSprite);
+	ParticleGroup(ParticlePhysics* p_particlePhysics, Shape* p_moveableArea, BOUND_ACTION p_boundAction,
+			Emitter* p_emitter, float p_defaultWeight, float p_defaultScaledSize, sf::Sprite p_defaultSprite);
 	~ParticleGroup();
+	void setBoundAction(BOUND_ACTION boundAction);
 	void setParticlesCount(int p_count);
 	void addParticles(int p_count);
 	void removeParticles(int p_count);
@@ -34,7 +43,7 @@ public:
 	void processData(float framerate);
 	void applyPhysics();
 	void checkBounds();
-	void respawn(std::list<Particle*>::iterator particle, Shape* shape);
+	void respawn(std::list<Particle*>::iterator particle);
 	int getParticleCount();
 	void setScaledSize(float p_scaledSize);
 
@@ -42,6 +51,7 @@ private:
 	ParticlePhysics* particlePhysics;
 	Shape* moveableArea;
 	Emitter* emitter;
+	BOUND_ACTION boundAction;
 	float defaultWeight;
 	sf::Sprite particleSprite;
 	float defaultScaledSize;

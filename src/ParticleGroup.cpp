@@ -13,9 +13,8 @@
 #include "ParticleGroup.h"
 #include "Constants.h"
 
-ParticleGroup::ParticleGroup(ParticlePhysics* p_particlePhysics,
-		Shape* p_moveableArea, Emitter* p_emitter, float p_defaultWeight, float p_defaultScaledSize,
-		sf::Sprite p_defaultParticleSprite)
+ParticleGroup::ParticleGroup(ParticlePhysics* p_particlePhysics, Shape* p_moveableArea, BOUND_ACTION p_boundAction,
+		Emitter* p_emitter, float p_defaultWeight, float p_defaultScaledSize, sf::Sprite p_defaultParticleSprite)
 {
 	emitter = p_emitter;
 	particlePhysics = p_particlePhysics;
@@ -23,6 +22,7 @@ ParticleGroup::ParticleGroup(ParticlePhysics* p_particlePhysics,
 	particleSprite = p_defaultParticleSprite;
 	defaultWeight = p_defaultWeight;
 	defaultScaledSize = p_defaultScaledSize;
+	boundAction = p_boundAction;
 	srand(time(NULL));
 }
 
@@ -38,13 +38,16 @@ void ParticleGroup::addParticles(int p_count)
 	{
 		Point pt = emitter->emitPosition();
 		addParticleAt(pt);
-		std::cout << pt;
 	}
 }
 
 void ParticleGroup::removeParticles(int p_count)
 {
-	particles.resize(p_count);
+	for (int i = 0; i < p_count; i++)
+	{
+		particles.pop_back();
+	}
+	//particles.resize(p_count);
 }
 
 void ParticleGroup::addParticleAt(Point p_spawnPoint)
@@ -67,6 +70,11 @@ void ParticleGroup::setScaledSize(float p_scaledSize)
 	defaultScaledSize = p_scaledSize;
 }
 
+void ParticleGroup::setBoundAction(BOUND_ACTION p_boundAction)
+{
+	boundAction = p_boundAction;
+}
+
 void ParticleGroup::setRandVect()
 {
 	std::list<Particle*>::iterator beginIt = particles.begin();
@@ -87,12 +95,11 @@ void ParticleGroup::processData(float framerate)
 	std::for_each(particles.begin(), particles.end(), std::bind2nd(std::mem_fun(&Particle::processData), framerate));
 }
 
-void ParticleGroup::respawn(std::list<Particle*>::iterator particle, Shape* shape)
+void ParticleGroup::respawn(std::list<Particle*>::iterator particle)
 {
-
-//emitter.getVector();
-//	(*particle)->setPosition(emitter.getPoint());
-//	(*particle)->setVectorXY(emitter.getVector());
+	Point respawnPos = emitter->emitPosition();
+	(*particle)->setPosition(respawnPos);
+	(*particle)->setVectorXY(emitter->emitVector());
 }
 
 void ParticleGroup::applyPhysics()
@@ -114,21 +121,39 @@ void ParticleGroup::checkBounds()
 	std::list<Particle*>::iterator beginIt = particles.begin();
 	std::list<Particle*>::iterator endIt = particles.end();
 	std::list<Particle*>::iterator tmpIt;
-	Particle * particle = NULL;
+	Particle* particle = NULL;
 	for (tmpIt = beginIt; tmpIt != endIt; tmpIt++)
 	{
-		Point particlePosition = particle->getPosition();
+		particle = (*tmpIt);
+		Point particlePosition = (*tmpIt)->getPosition();
 		Point closesInsidePosition = moveableArea->getClosestInsidePoint(particlePosition);
-			if (particlePosition != closesInsidePosition)
-		 {
-		 particle->stop();
-		 particle->setPosition(closesInsidePosition);
-		 }
-		/*if (particlePosition != closesInsidePosition)
+		if (particlePosition != closesInsidePosition)
 		{
-			//tmpIt = particles.erase(tmpIt);
-			respawn(tmpIt, &spawnArea);
-		}*/
+			switch (boundAction)
+			{
+			case bound_stop:
+			{
+				particle->stop();
+				particle->setPosition(closesInsidePosition);
+				break;
+			}
+			case bound_mirror_port:
+			{
+				//		moveableArea->getMirroredPosition();
+				break;
+			}
+			case bound_respawn:
+			{
+				respawn(tmpIt);
+				break;
+			}
+			case bound_kill:
+			{
+				tmpIt = particles.erase(tmpIt);
+				break;
+			}
+			}
+		}
 	}
 }
 

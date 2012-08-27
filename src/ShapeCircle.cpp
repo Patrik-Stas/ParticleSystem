@@ -28,7 +28,7 @@ Point ShapeCircle::getInsidePoint() const
 {
 	float angle = rand()%360;
 	float distance = rand()%radius;
-	return Point(cos(angle*PI/180)*distance+x, sin(angle*PI/180)*distance+y);
+	return Point(x + cos(angle*PI/180)*distance, y + sin(angle*PI/180)*distance);
 }
 
 

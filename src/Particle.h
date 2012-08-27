@@ -43,6 +43,8 @@ public:
     void invertVectorY   ()    {setVectorY(-getVectorY());};
     void invertVectorXY  ()    {invertVectorX(); invertVectorY();};
 
+    void adjustSpeed(float multiplicator) {vectorX *= multiplicator; vectorY *= multiplicator;};
+
     float getAx() const        {return ax;};
     float getAy() const        {return ay;};
     float getWeight() const    {return weight;};
