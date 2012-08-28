@@ -70,6 +70,12 @@ void ParticleGroup::setScaledSize(float p_scaledSize)
 	defaultScaledSize = p_scaledSize;
 }
 
+void ParticleGroup::setAlpha(int p_alpha)
+{
+	std::for_each(particles.begin(), particles.end(),
+			std::bind2nd(std::mem_fun(&Particle::setAlpha), p_alpha));
+}
+
 void ParticleGroup::setBoundAction(BOUND_ACTION p_boundAction)
 {
 	boundAction = p_boundAction;
@@ -155,6 +161,11 @@ void ParticleGroup::checkBounds()
 			}
 		}
 	}
+}
+
+void ParticleGroup::paint(sf::RenderWindow* window)
+{
+	std::for_each(particles.begin(), particles.end(), std::bind2nd(std::mem_fun(&Particle::paint), window));
 }
 
 int ParticleGroup::getParticleCount()

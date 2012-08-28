@@ -68,6 +68,8 @@ public:
 
     static void fixDirection ();
 
+    void setAlpha(int p_alpha) { color.setAlpha(p_alpha);};
+
     Color color;
 
 private:

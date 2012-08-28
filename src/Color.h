@@ -24,12 +24,13 @@ public:
 	void setAlpha(int red);
 	float getAlpha() const;
 
+protected:
+	void checkColorValue(int& p_colorVal);
 	float red;
 	float green;
 	float blue;
 	float alpha;
-private:
-	void checkColorValue(int& p_colorVal);
+
 
 };
 

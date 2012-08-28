@@ -32,10 +32,10 @@ void Gradient::shiftColor()
 void Gradient::setShifts()
 {
 	Color nextColor = getNextColor();
-	redShift = (nextColor.red - red) * speed;
-	greenShift = (nextColor.green - green) * speed;
-	blueShift = (nextColor.blue - blue) * speed;
-	shiftsLeft = (nextColor.red - red) / redShift;
+	redShift = (nextColor.getRed() - red) * speed;
+	greenShift = (nextColor.getGreen() - green) * speed;
+	blueShift = (nextColor.getBlue() - blue) * speed;
+	shiftsLeft = (nextColor.getRed() - red) / redShift;
 }
 
 Color Gradient::getNextColor()

@@ -15,7 +15,7 @@ ParticleSfmlPrimitive::ParticleSfmlPrimitive(float p_ax, float p_ay, float p_wei
 	scaledSize = p_scaledRadius;
 	circle.setPointCount(30);
 	circle.setRadius(p_radius*p_scaledRadius);
-	circle.setFillColor(sf::Color(color.red, color.green, color.blue, color.alpha));
+	circle.setFillColor(sf::Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
 }
 
 void ParticleSfmlPrimitive::setScaledSize(float p_scaledSize)

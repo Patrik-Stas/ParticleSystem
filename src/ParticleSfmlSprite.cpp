@@ -22,7 +22,7 @@ void ParticleSfmlSprite::setScaledSize(float p_scaledSize)
 
 void ParticleSfmlSprite::paint(sf::RenderWindow* window)
 {
-	sprite.setColor(sf::Color(color.red, color.green, color.blue, color.alpha));
+	sprite.setColor(sf::Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
 	sprite.setPosition(getAx(), getAy());
 	window->draw(sprite);
 }

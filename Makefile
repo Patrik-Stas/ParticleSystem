@@ -9,13 +9,13 @@ all: compile
 
 compile: $(NM)
 
-$(NM): main.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o ParticleGroupPainter.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o
-	$(LD) -o $(NM) main.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o ParticleGroupPainter.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o $(LIBS)
+$(NM): main.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o
+	$(LD) -o $(NM) main.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o $(LIBS)
 
 main.o: $(SRC)/main.cpp $(SRC)/ParticleSystem.h 
 	$(CXX) $(CFLAGS) -c -o $@ $<
 
-ParticleSystem.o: $(SRC)/ParticleSystem.cpp $(SRC)/ParticleSystem.h $(SRC)/Particle.h $(SRC)/ParticleGroup.h  $(SRC)/Color.h $(SRC)/Color.h  $(SRC)/Gradient.h $(SRC)/ParticleGroupPainter.h
+ParticleSystem.o: $(SRC)/ParticleSystem.cpp $(SRC)/ParticleSystem.h $(SRC)/Particle.h $(SRC)/ParticleGroup.h  $(SRC)/Color.h $(SRC)/Color.h  $(SRC)/Gradient.h 
 	$(CXX) $(CFLAGS) -c -o $@ $<
 
 Color.o: $(SRC)/Color.cpp $(SRC)/Color.h  
@@ -31,9 +31,6 @@ ParticlePhysics.o: $(SRC)/ParticlePhysics.cpp $(SRC)/ParticlePhysics.h  $(SRC)/P
 	$(CXX) $(CFLAGS) -c -o $@ $<
 	
 ParticleGroup.o: $(SRC)/ParticleGroup.cpp $(SRC)/ParticleGroup.h  $(SRC)/Particle.h  $(SRC)/ParticlePhysics.h
-	$(CXX) $(CFLAGS) -c -o $@ $<
-	
-ParticleGroupPainter.o: $(SRC)/ParticleGroupPainter.cpp $(SRC)/ParticleGroupPainter.h $(SRC)/ParticleGroup.h  $(SRC)/Particle.h
 	$(CXX) $(CFLAGS) -c -o $@ $<
 	
 Shape.o: $(SRC)/Shape.cpp $(SRC)/Shape.h

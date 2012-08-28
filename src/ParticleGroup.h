@@ -46,6 +46,8 @@ public:
 	void respawn(std::list<Particle*>::iterator particle);
 	int getParticleCount();
 	void setScaledSize(float p_scaledSize);
+	void setAlpha(int p_alpha);
+	void paint(sf::RenderWindow* window);
 
 private:
 	ParticlePhysics* particlePhysics;
