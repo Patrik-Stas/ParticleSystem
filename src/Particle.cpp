@@ -9,6 +9,7 @@
 
 #include "ParticleSfmlPrimitive.h"
 #include "ParticleSfmlSprite.h"
+#include <math.h>
 
 Particle::Particle(float p_ax, float p_ay, float p_weight, float p_scaledSize, Color p_color)
 {
@@ -35,6 +36,16 @@ void Particle::setVectorXY(float p_vectorX, float p_vectorY)
 {
 	vectorX = p_vectorX;
 	vectorY = p_vectorY;
+}
+
+float Particle::getSpeed()
+{
+	return sqrt(vectorX*vectorX+vectorY*vectorY);
+}
+
+float Particle::getAngle()
+{
+	return atan2(vectorX,vectorY) * 180 / PI;
 }
 
 Particle* Particle::getParticleSfmlPrimitive(float p_ax, float p_ay, float p_weight, int p_maximalRadius, float p_scaledSize, Color p_color)

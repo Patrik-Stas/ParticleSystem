@@ -44,6 +44,8 @@ public:
     void invertVectorXY  ()    {invertVectorX(); invertVectorY();};
 
     void adjustSpeed(float multiplicator) {vectorX *= multiplicator; vectorY *= multiplicator;};
+    float getSpeed();
+    float getAngle();
 
     float getAx() const        {return ax;};
     float getAy() const        {return ay;};
