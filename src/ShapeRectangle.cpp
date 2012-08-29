@@ -9,7 +9,6 @@
 #include <stdlib.h>
 
 
-
 ShapeRectangle::ShapeRectangle(Point p_pt, int p_width, int p_height) : Shape(p_pt)
 {
 	width = p_width;

@@ -9,10 +9,16 @@ all: compile
 
 compile: $(NM)
 
-$(NM): main.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o
-	$(LD) -o $(NM) main.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o $(LIBS)
+$(NM): main.o MovingObject.o AutomatedMovingObject.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o 
+	$(LD) -o $(NM) main.o MovingObject.o AutomatedMovingObject.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o $(LIBS)
 
 main.o: $(SRC)/main.cpp $(SRC)/ParticleSystem.h 
+	$(CXX) $(CFLAGS) -c -o $@ $<
+
+MovingObject.o: $(SRC)/MovingObject.cpp $(SRC)/MovingObject.h  
+	$(CXX) $(CFLAGS) -c -o $@ $<
+	
+AutomatedMovingObject.o: $(SRC)/AutomatedMovingObject.cpp $(SRC)/AutomatedMovingObject.h  
 	$(CXX) $(CFLAGS) -c -o $@ $<
 
 ParticleSystem.o: $(SRC)/ParticleSystem.cpp $(SRC)/ParticleSystem.h $(SRC)/Particle.h $(SRC)/ParticleGroup.h  $(SRC)/Color.h $(SRC)/Color.h  $(SRC)/Gradient.h 
