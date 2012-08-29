@@ -29,9 +29,6 @@ class ParticleGroup
 public:
 	ParticleGroup();
 	list<Particle*> particles;
-
-	ParticleGroup(ParticlePhysics* p_particlePhysics, Shape* p_moveableArea, BOUND_ACTION p_boundAction,
-			Emitter* p_emitter, float p_defaultWeight, float p_defaultScaledSize, sf::Sprite p_defaultSprite);
 	~ParticleGroup();
 	void setBoundAction(BOUND_ACTION boundAction);
 	void setParticlesCount(int p_count);
@@ -48,6 +45,12 @@ public:
 	void setScaledSize(float p_scaledSize);
 	void setAlpha(int p_alpha);
 	void paint(sf::RenderWindow* window);
+	void setDefaultScaledSize(float defaultScaledSize);
+	void setDefaultWeight(float defaultWeight);
+	void setEmitter( Emitter* emitter);
+	void setMoveableArea( Shape* moveableArea);
+	void setParticlePhysics( ParticlePhysics* particlePhysics);
+	void setParticleSprite( sf::Sprite particleSprite);
 
 private:
 	ParticlePhysics* particlePhysics;

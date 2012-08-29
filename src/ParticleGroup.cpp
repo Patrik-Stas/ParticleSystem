@@ -13,16 +13,8 @@
 #include "ParticleGroup.h"
 #include "Constants.h"
 
-ParticleGroup::ParticleGroup(ParticlePhysics* p_particlePhysics, Shape* p_moveableArea, BOUND_ACTION p_boundAction,
-		Emitter* p_emitter, float p_defaultWeight, float p_defaultScaledSize, sf::Sprite p_defaultParticleSprite)
+ParticleGroup::ParticleGroup()
 {
-	emitter = p_emitter;
-	particlePhysics = p_particlePhysics;
-	moveableArea = p_moveableArea;
-	particleSprite = p_defaultParticleSprite;
-	defaultWeight = p_defaultWeight;
-	defaultScaledSize = p_defaultScaledSize;
-	boundAction = p_boundAction;
 	srand(time(NULL));
 }
 
@@ -161,6 +153,37 @@ void ParticleGroup::checkBounds()
 			}
 		}
 	}
+}
+
+void ParticleGroup::setDefaultScaledSize(float defaultScaledSize)
+{
+	this->defaultScaledSize = defaultScaledSize;
+}
+
+void ParticleGroup::setDefaultWeight(float defaultWeight)
+{
+	this->defaultWeight = defaultWeight;
+}
+
+void ParticleGroup::setEmitter( Emitter* emitter)
+{
+	this->emitter = emitter;
+}
+
+void ParticleGroup::setMoveableArea( Shape* moveableArea)
+{
+	this->moveableArea = moveableArea;
+}
+
+void ParticleGroup::setParticlePhysics( ParticlePhysics* particlePhysics)
+{
+	this->particlePhysics = particlePhysics;
+}
+
+
+void ParticleGroup::setParticleSprite( sf::Sprite particleSprite)
+{
+	this->particleSprite = particleSprite;
 }
 
 void ParticleGroup::paint(sf::RenderWindow* window)
