@@ -9,8 +9,8 @@ all: compile
 
 compile: $(NM)
 
-$(NM): main.o MovingObject.o AutomatedMovingObject.o GravityPoint.o AutomatedGravityPoint.o MouseControllGravityPoint.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o 
-	$(LD) -o $(NM) main.o MovingObject.o AutomatedMovingObject.o GravityPoint.o AutomatedGravityPoint.o MouseControllGravityPoint.o ParticleSystem.o Color.o Gradient.o Particle.o ParticleGroup.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o $(LIBS)
+$(NM): main.o MovingObject.o AutomatedMovingObject.o GravityPoint.o AutomatedGravityPoint.o MouseControllGravityPoint.o ParticleSystem.o Color.o Gradient.o ParticleColorManager.o Particle.o ParticleGroup.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o 
+	$(LD) -o $(NM) main.o MovingObject.o AutomatedMovingObject.o GravityPoint.o AutomatedGravityPoint.o MouseControllGravityPoint.o ParticleSystem.o Color.o Gradient.o ParticleColorManager.o Particle.o ParticleGroup.o Shape.o ShapeRectangle.o Point.o ParticleSfmlPrimitive.o ParticleSfmlSprite.o ParticlePhysics.o ShapeCircle.o Emitter.o $(LIBS)
 
 
 main.o: $(SRC)/main.cpp $(SRC)/ParticleSystem.h 
@@ -38,6 +38,9 @@ Color.o: $(SRC)/Color.cpp $(SRC)/Color.h
 	$(CXX) $(CFLAGS) -c -o $@ $<
 
 Gradient.o: $(SRC)/Gradient.cpp $(SRC)/Color.h $(SRC)/Gradient.h 
+	$(CXX) $(CFLAGS) -c -o $@ $<
+	
+ParticleColorManager.o: $(SRC)/ParticleColorManager.cpp $(SRC)/ParticleColorManager.h $(SRC)/Color.h  $(SRC)/ParticleGroup.h 
 	$(CXX) $(CFLAGS) -c -o $@ $<
 	
 Particle.o: $(SRC)/Particle.cpp $(SRC)/Particle.h 
