@@ -82,6 +82,9 @@ private:
 
 protected:
     float scaledSize; // 1 = normal size
+
+
+
 };
 
 #endif /* PARTICLE_H_ */

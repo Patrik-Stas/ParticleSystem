@@ -18,3 +18,14 @@ std::string getString(float number)
 	sstr << number;
 	return sstr.str();
 }
+
+std::string getActualTime()
+{
+	  time_t rawtime;
+	  struct tm * timeinfo;
+	  char buffer [80];
+	  time ( &rawtime );
+	  timeinfo = localtime ( &rawtime );
+	  strftime (buffer,80,"%Y-%m-%d-%H-%M-%S",timeinfo);
+	  return std::string (buffer, strlen(buffer));
+}
