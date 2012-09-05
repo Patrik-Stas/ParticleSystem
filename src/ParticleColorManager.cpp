@@ -177,12 +177,7 @@ int ParticleColorManager::calculateColor(COLOR_CALCULATION_BY& calculateBy, Part
 
 }
 
-void ParticlePhysics::fileDump(const char * filename)
-{
-	/*std::ofstream myfile;
-	 myfile.open(filename, std::ios::out | std::ios::app);
-	 myfile << *this << endl;*/
-}
+
 
 std::ostream& operator<<(std::ostream& ostr, const COLOR_CALCULATION_BY& colorCalculation)
 {

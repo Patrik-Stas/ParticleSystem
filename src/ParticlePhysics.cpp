@@ -17,14 +17,14 @@ ParticlePhysics::ParticlePhysics()
 	gravityPointForce = false;
 }
 
-void ParticlePhysics::applyGravityPoint(Particle* particle)
+void ParticlePhysics::applyGravityPoint(Particle* particle, GravityPoint* gravityPoint)
 {
-	if ((*gravityPoint)->isActive())
+	if (gravityPoint->isActive())
 	{
-		float distX = particle->getAx() - (*gravityPoint)->getX();
-		float distY = particle->getAy() - (*gravityPoint)->getY();
+		float distX = particle->getAx() - gravityPoint->getX();
+		float distY = particle->getAy() - gravityPoint->getY();
 		float distance = sqrt(distX * distX + distY * distY);
-		float force = gravitation * ((particle->getWeight() * (*gravityPoint)->getWeight()) / (distance * distance));
+		float force = gravitation * ((particle->getWeight() * gravityPoint->getWeight()) / (distance * distance));
 		float angle = atan2(distY, distX) * 180 / PI;
 		float pushX = cos(angle * PI / 180) * force;
 		float pushY = sin(angle * PI / 180) * force;
@@ -83,25 +83,7 @@ bool ParticlePhysics::isGravityPointForce() const
 	return gravityPointForce;
 }
 
-void ParticlePhysics::setGravityPoint(GravityPoint** p_gravityPoint)
-{
-	gravityPoint = p_gravityPoint;
-}
-
 void ParticlePhysics::setGravityPointForce(bool gravityPointForce)
 {
 	this->gravityPointForce = gravityPointForce;
-}
-
-
-
-std::ostream& operator<<(std::ostream& ostr, const ParticlePhysics& physics)
-{
-//	ostr << "Gravitation: " << physics.getGravitation() << endl;
-//	ostr << "GravityPointForce: " << physics.gravityPointForce << endl;
-//	ostr << "DownForce: " << physics.downForce << endl;
-/*	ostr << "RedCalc: " << physics.redColorCalculation << endl;
-	ostr << "GreenCalc: " << physics.greenColorCalculation << endl;
-	ostr << "BlueCalc: " << physics.blueColorCalculation << endl;*/
-	return ostr;
 }

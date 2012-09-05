@@ -66,7 +66,7 @@ ShapeCircle circle(Point(200, 200), 60);
 Emitter ParticleSystem::circleEmitter = Emitter(&circle);
 
 ParticleSystem::ParticleSystem() :
-		moveableArea(Point(0, 0), SCREEN_WIDTH, SCREEN_HEIGHT - 7)
+		moveableArea(Point(0, 0), SCREEN_WIDTH, SCREEN_HEIGHT - 20)
 {
 	automatedMovingObject.setMoveableArea(&moveableArea);
 	automatedGravityPoint.setAutomatedMovingObject(&automatedMovingObject);
@@ -76,7 +76,6 @@ ParticleSystem::ParticleSystem() :
 	showMenu = true;
 	automaticColorSchemeChange = false;
 
-	particlePhysics.setGravityPoint(&gravityPoint);
 	particlePhysics.setGravitation(1.0f);
 	particlePhysics.setDownForce(false);
 
@@ -438,8 +437,6 @@ int ParticleSystem::run()
 			{
 				if (event.key.code == KEY_SHOW_HIDE_MENU)
 					showMenu = (showMenu) ? false : true;
-				if (event.key.code == KEY_DUMP_COLOR)
-					particlePhysics.fileDump("Dump/ColorSchemas");
 				if (event.key.code == KEY_PAUSE_CONTINUE)
 				{
 					if (applicationPaused)
@@ -496,7 +493,7 @@ int ParticleSystem::run()
 
 			lastTime = clock.getElapsedTime();
 
-			particleGroup.applyPhysics(&particlePhysics);
+			particleGroup.applyPhysics(&particlePhysics, gravityPoint);
 			particleGroup.processData(framerate);
 			particleGroup.checkBounds();
 			gravityPoint->calcNextPosition(framerate);

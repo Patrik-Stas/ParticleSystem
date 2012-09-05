@@ -37,6 +37,7 @@ void ParticleGroup::removeParticles(int p_count)
 {
 	for (int i = 0; i < p_count; i++)
 	{
+		delete particles.back();
 		particles.pop_back();
 	}
 	//particles.resize(p_count);
@@ -100,7 +101,7 @@ void ParticleGroup::respawn(std::list<Particle*>::iterator particle)
 	(*particle)->setVectorXY(emitter->emitVector());
 }
 
-void ParticleGroup::applyPhysics( ParticlePhysics* particlePhysics )
+void ParticleGroup::applyPhysics( ParticlePhysics* particlePhysics, GravityPoint* gravityPoint)
 {
 	std::list<Particle*>::iterator beginIt = particles.begin();
 	std::list<Particle*>::iterator endIt = particles.end();
@@ -109,7 +110,7 @@ void ParticleGroup::applyPhysics( ParticlePhysics* particlePhysics )
 	for (tmpIt = beginIt; tmpIt != endIt; tmpIt++)
 	{
 		particle = *tmpIt;
-		particlePhysics->applyGravityPoint(particle);
+		particlePhysics->applyGravityPoint(particle, gravityPoint);
 		particlePhysics->applyDownForce(particle);
 	}
 }
@@ -192,4 +193,5 @@ int ParticleGroup::getParticleCount()
 
 ParticleGroup::~ParticleGroup()
 {
+	setParticlesCount(0);
 }

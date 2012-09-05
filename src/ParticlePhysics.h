@@ -17,21 +17,15 @@ class ParticlePhysics
 public:
 	ParticlePhysics();
 	void applyDownForce(Particle* particle);
-	void applyGravityPoint(Particle* particle);
+	void applyGravityPoint(Particle* particle, GravityPoint* gravityPoint);
 	bool isDownForce() const;
 	void setDownForce(bool downForce);
 	float getGravitation() const;
 	void setGravitation(float gravitation);
 	const GravityPoint* getGravityPoint() const;
-	void setGravityPoint( GravityPoint** gravityPoint);
 	bool isGravityPointForce() const;
 	void setGravityPointForce(bool gravityPointForce);
-
-	void fileDump(const char * filename);
-	friend std::ostream& operator<<( std::ostream& ostr, const ParticlePhysics& pt);
-
 protected:
-	GravityPoint** gravityPoint;
 	float gravitation;
 	bool downForce;
 	bool gravityPointForce;
