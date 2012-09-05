@@ -13,16 +13,9 @@
 #include "ShapeRectangle.h"
 #include "ParticlePhysics.h"
 #include "Emitter.h"
+#include "ParticleActionEnum.h"
 
 using std::list;
-
-enum BOUND_ACTION
-{
-	bound_stop,
-	bound_mirror_port,
-	bound_respawn,
-	bound_kill
-};
 
 /// represents
 class ParticleGroup
@@ -31,7 +24,7 @@ public:
 	ParticleGroup();
 	list<Particle*> particles;
 	~ParticleGroup();
-	void setBoundAction(BOUND_ACTION boundAction);
+	void setBoundAction(PARTICLE_ACTION boundAction);
 	void setParticlesCount(int p_count);
 	void addParticles(int p_count);
 	void removeParticles(int p_count);
@@ -44,7 +37,9 @@ public:
 	void respawn(std::list<Particle*>::iterator particle);
 	int getParticleCount();
 	void setScaledSize(float p_scaledSize);
+	float getScaledSize();
 	void setAlpha(int p_alpha);
+	float getAlpha();
 	void paint(sf::RenderWindow* window);
 	void setDefaultScaledSize(float defaultScaledSize);
 	void setDefaultWeight(float defaultWeight);
@@ -56,7 +51,7 @@ private:
 	ParticlePhysics* particlePhysics;
 	Shape* moveableArea;
 	Emitter* emitter;
-	BOUND_ACTION boundAction;
+	PARTICLE_ACTION boundAction;
 	float defaultWeight;
 	sf::Sprite particleSprite;
 	float defaultScaledSize;

@@ -28,12 +28,10 @@
 #include "MouseControllGravityPoint.h"
 #include "ParticleColorManager.h"
 #include "ControlPanel.h"
-//class sfg::ControlPanel;
+#include "ParticleActionEnum.h"
 
-enum PARTICLE_ACTION
-{
-	STOP, RESPAWN, MIRROR_PORT
-};
+class ControlPanel;
+
 
 class ParticleSystem
 {
@@ -41,7 +39,7 @@ public:
 	ParticleSystem();
 	int run();
 	virtual ~ParticleSystem();
-private:
+
 	int c_mouseX;
 	int c_mouseY;
 	bool c_rightButtonClicked;
@@ -82,7 +80,7 @@ private:
 	static sf::Sprite DEFAULT_PARTICLE_SPRITE;
 	static sf::RenderWindow appWindow;
 	static Emitter circleEmitter;
-	static const BOUND_ACTION DEFAULT_BOUND_ACTION;
+	static const PARTICLE_ACTION DEFAULT_BOUND_ACTION;
 
 	sfg::Scrollbar::Ptr getScrollbar(float lowerValue, float upperValue, float minorStep, float majorStep,
 			void (ParticleSystem::*function)(), ParticleSystem* object);
@@ -92,47 +90,46 @@ private:
 
 	bool showMenu;
 
-	int particleAlpha;
-	sfg::Scrollbar::Ptr particleAlphaScrollbar;
-	sfg::Label::Ptr particleAlphaLabel;
-	void particleAlphaChange();
-	void particleAlphaUp();
-	void particleAlphaDown();
-
 	sf::Texture particleTexture;
-	sfg::Scrollbar::Ptr particleSizeScrollbar;
-	sfg::Label::Ptr particleSizeLabel;
-	void particleSizeChange();
-	void particleSizeUp();
-	void particleSizeDown();
 
-	sf::Text fpsText;
+	void setParticleSize(float p_size);
+	float getParticleSize();
+	void setParticleSizeUp();
+	void setParticleSizeDown();
 
-	sfg::Scrollbar::Ptr gravityScrollbar;
-	sfg::Label::Ptr gravity_label;
+	void setGravitation(float p_gravitation);
+	float getGravitation();
 	void setGravitationUp();
 	void setGravitationDown();
-	void setGravitation(float p_gravitation);
+
+	void setGravityPointWeigth(float p_weight);
+	float getGravityPointWeigth();
+	void setGravityPointWeigthUp();
+	void setGravityPointWeigthDown();
+
+	bool sideGravity;
+	void setSideGravity(bool p_sideGravity);
+	bool isSideGravity();
+
+	PARTICLE_ACTION getParticleBoundaryAction();
+	void setParticleBoundaryAction(PARTICLE_ACTION action);
+	PARTICLE_ACTION boundaryParticleAction;
 
 	GravityPoint* gravityPoint;
 	AutomatedGravityPoint automatedGravityPoint;
 	AutomatedMovingObject automatedMovingObject;
 	MouseControllGravityPoint mouseControllGravityPoint;
 
-	sfg::Scrollbar::Ptr gravityPointWeightScrollbar;
-	sfg::Label::Ptr gravityPointWeightLabel;
-	void gravityPointWeightChange();
-	void gravityPointWeightUp();
-	void gravityPointWeightDown();
 
-	sfg::CheckButton::Ptr planetaryGravity;
-	void SwitchDownForce();
+	void setParticleCount(int p_count);
+	int getParticleCount();
+	void setParticleCountUp();
+	void setParticleCountDown();
 
-	sfg::Scrollbar::Ptr particleCountScrollbar;
-	sfg::Label::Ptr particleCountLabel;
-	void particleCountChange();
-	void particleCountUp();
-	void particleCountDown();
+	void setParticleAlpha(float p_alpha);
+	float getParticleAlpha();
+	void setParticleAlphaUp();
+	void setParticleAlphaDown();
 
 	sfg::Scrollbar::Ptr colorTransientLengthScrollbar;
 	sfg::Label::Ptr colorTransientLengthLabel;
@@ -140,38 +137,26 @@ private:
 	void colorTransientLengthUp();
 	void colorTransientLengthDown();
 
-	PARTICLE_ACTION boundaryParticleAction;
-	sfg::RadioButton::Ptr stop;
-	sfg::RadioButton::Ptr respawn;
-	sfg::RadioButton::Ptr mirrorPort;
-	sfg::RadioButton::Ptr kill;
-	void ParticleBoundaryAction();
-
-	sfg::Button::Ptr switchColorScheme;
 	void changeColorScheme();
 
 	bool automaticColorSchemeChange;
-	sfg::ToggleButton::Ptr autoColorSchemeToggleButton;
-	void autoColorSchemeChangeToggleButtonAction();
+	void setAutoColorScheme(bool p_autoColorSchemeChange);
+	bool isAutoColorScheme();
 
 	bool toTakePicture;
 	void takeScreenshot();
 	void buttonActionTakeScreenshot();
 	sfg::Button::Ptr takePictureButton;
 
-	void drawModeChangeAction();
-	void switchDrawMode();
+	void setDotMode(bool p_dotMode);
+	bool isDotMode();
 	bool dotMode;
-	sfg::RadioButton::Ptr dotDrawMode;
-	sfg::RadioButton::Ptr paintDrawMode;
 
-	void changeGravityPointMode();
-	sfg::RadioButton::Ptr automaticGravityPointMode;
-	sfg::RadioButton::Ptr manualGravityPointMode;
+	void setMouseGravityPointMode(bool p_mouseGravityPointMode);
+	bool isMouseGravityPointMode();
 
 	void switchGravityPointForceActive();
-	sfg::Box::Ptr main_box;
-	sfg::ControlPanel::Ptr controlPanel;
+	ControlPanel* panelBox;
 
 	sfg::Window::Ptr sfguiWindow;
 	sfg::SFGUI sfgui;

@@ -63,13 +63,23 @@ void ParticleGroup::setScaledSize(float p_scaledSize)
 	defaultScaledSize = p_scaledSize;
 }
 
+float ParticleGroup::getScaledSize()
+{
+	return defaultScaledSize;
+}
+
 void ParticleGroup::setAlpha(int p_alpha)
 {
 	std::for_each(particles.begin(), particles.end(),
 			std::bind2nd(std::mem_fun(&Particle::setAlpha), p_alpha));
 }
 
-void ParticleGroup::setBoundAction(BOUND_ACTION p_boundAction)
+float ParticleGroup::getAlpha()
+{
+	return (*particles.begin())->color.getAlpha();
+}
+
+void ParticleGroup::setBoundAction(PARTICLE_ACTION p_boundAction)
 {
 	boundAction = p_boundAction;
 }
@@ -130,23 +140,23 @@ void ParticleGroup::checkBounds()
 		{
 			switch (boundAction)
 			{
-			case bound_stop:
+			case STOP:
 			{
 				particle->stop();
 				particle->setPosition(closesInsidePosition);
 				break;
 			}
-			case bound_mirror_port:
+			case MIRROR_PORT:
 			{
 				//		moveableArea->getMirroredPosition();
 				break;
 			}
-			case bound_respawn:
+			case RESPAWN:
 			{
 				respawn(tmpIt);
 				break;
 			}
-			case bound_kill:
+			case DISAPPEAR:
 			{
 				tmpIt = particles.erase(tmpIt);
 				break;
