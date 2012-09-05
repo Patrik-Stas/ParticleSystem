@@ -93,6 +93,16 @@ private:
 	void gravityPointModeGuiChange();
 	void gravityPointModeGuiUpdate();
 
+	// COLOR TRANSIENT LENGTH
+	sfg::Scrollbar::Ptr colorTransientLengthScrollbar;
+	sfg::Label::Ptr colorTransientLengthLabel;
+	void colorTransientLengthGuiChange();
+	void colorTransientLengthGuiUpdate();
+
+	// SCREENSHOT
+	sfg::Button::Ptr takeScreenshotButton;
+	void takeScreenshot();
+
 
 	static sfg::Scrollbar::Ptr getScrollbar(float lowerValue, float upperValue, float minorStep, float majorStep,
 			void (ControlPanel::*function)(), ControlPanel* object);

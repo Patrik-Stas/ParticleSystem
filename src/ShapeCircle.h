@@ -17,6 +17,7 @@ public:
 	bool isInside(Point p_pt) const;
 	Point getInsidePoint() const;
 	Point getClosestInsidePoint(Point p_pt) const;
+	Point getOposittePosition(Point pt) const;
 	virtual ~ShapeCircle();
 private:
 	int radius;

@@ -9,6 +9,7 @@
 #include "ShapeCircle.h"
 #include "Misc.h"
 #include <ctime>
+#include "Constants.h"
 
 using std::cout;
 using std::endl;
@@ -29,13 +30,6 @@ const int ParticleSystem::SCREEN_WIDTH = 1276;
 const int ParticleSystem::SCREEN_HEIGHT = 758;
 const float ParticleSystem::PDEFAULT_GRAVITYPOINT_WEIGHT = 10000;
 
-const float ParticleSystem::DEFAULT_GRAVITY = 4.5;
-const float ParticleSystem::DEFAULT_GRAVITYPOINT_WEIGHT = 50000;
-const float ParticleSystem::DEFAULT_PARTICLE_WEIGHT = 1;
-const float ParticleSystem::DEFAULT_PARTICLE_SCALEDSIZE = 0.04;
-const float ParticleSystem::DEFAULT_PARTICLE_ALPHA = 100;
-const float ParticleSystem::DEFAULT_PARTICLES_COUNT = 24000;
-const float ParticleSystem::DEFAULT_TRANSIENT_LENGTH = 0.3;
 const sf::Keyboard::Key ParticleSystem::KEY_SHOW_HIDE_MENU = sf::Keyboard::Q;
 const sf::Keyboard::Key ParticleSystem::KEY_PAUSE_CONTINUE = sf::Keyboard::P;
 const sf::Keyboard::Key ParticleSystem::KEY_SCREENSHOT = sf::Keyboard::W;
@@ -66,7 +60,7 @@ ShapeCircle circle(Point(200, 200), 60);
 Emitter ParticleSystem::circleEmitter = Emitter(&circle);
 
 ParticleSystem::ParticleSystem() :
-		moveableArea(Point(0, 0), SCREEN_WIDTH, SCREEN_HEIGHT - 20)
+		moveableArea(Point(0, 0), SCREEN_WIDTH-400, SCREEN_HEIGHT - 180)
 {
 	srand(time(NULL));
 
@@ -95,23 +89,6 @@ ParticleSystem::ParticleSystem() :
 	sfguiWindow = sfg::Window::Create();
 
 	panelBox = ControlPanel::getControlPanel(this, sfg::Box::VERTICAL, 0.1f);
-
-	/*main_box = sfg::Box::Create(sfg::Box::VERTICAL);
-
-
-
-	 main_box->Pack(colorTransientLengthLabel = sfg::Label::Create("Color transient speed (secs) : "));
-	 main_box->Pack(
-	 colorTransientLengthScrollbar = getScrollbar(0, 3.f, 0.3f, 1.f, &ParticleSystem::colorTransientLengthChange,
-	 this));
-
-	 takePictureButton = sfg::Button::Create("Take picture");
-	 takePictureButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&ParticleSystem::buttonActionTakeScreenshot, this);
-	 main_box->Pack(takePictureButton);
-
-
-
-	 sfguiWindow->Add(main_box);*/
 	sfguiWindow->Add(panelBox->getBox());
 	sfguiWindow->SetPosition(sf::Vector2f(SCREEN_WIDTH - sfguiWindow->GetRequisition().x, 0));
 
@@ -121,6 +98,7 @@ ParticleSystem::ParticleSystem() :
 	setParticleCount(20000);
 	setMouseGravityPointMode(true);
 	setGravityPointWeigth(100000);
+	setDotMode(true);
 
 
 	automaticMovingObject.setMoveableArea(&moveableArea);
@@ -143,7 +121,7 @@ sf::Font ParticleSystem::loadMainFont()
 
 void ParticleSystem::setGravitation(float p_gravitation)
 {
-	particlePhysics.setGravitation(p_gravitation);
+	particlePhysics.setGravitation(trimValue(p_gravitation, MIN_GRAVITY, MAX_GRAVITY));
 }
 float ParticleSystem::getGravitation()
 {
@@ -151,15 +129,16 @@ float ParticleSystem::getGravitation()
 }
 void ParticleSystem::setGravitationUp()
 {
-	particlePhysics.setGravitation(particlePhysics.getGravitation() + 2000);
+	setGravitation(particlePhysics.getGravitation() + 2);
 }
 void ParticleSystem::setGravitationDown()
 {
-	particlePhysics.setGravitation(particlePhysics.getGravitation() - 2000);
+	setGravitation(particlePhysics.getGravitation() - 2);
 }
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void ParticleSystem::setGravityPointWeigth(float p_weight)
 {
+	p_weight = trimValue(p_weight, MIN_GRAVITYPOINT_WEIGHT, MAX_GRAVITYPOINT_WEIGHT);
 	mouseControllGravityPoint.setWeight(p_weight);
 	automatedGravityPoint.setWeight(p_weight);
 }
@@ -169,12 +148,11 @@ float ParticleSystem::getGravityPointWeigth()
 }
 void ParticleSystem::setGravityPointWeigthUp()
 {
-	gravityPoint->setWeight(gravityPoint->getWeight() + 1000);
-	cout << "GP UP ;;; "<< gravityPoint->getWeight()  << endl;
+	setGravityPointWeigth(gravityPoint->getWeight() + 1000);
 }
 void ParticleSystem::setGravityPointWeigthDown()
 {
-	gravityPoint->setWeight(gravityPoint->getWeight() - 1000);
+	setGravityPointWeigth(gravityPoint->getWeight() - 1000);
 }
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void ParticleSystem::setSideGravity(bool p_sideGravity)
@@ -197,7 +175,7 @@ void ParticleSystem::setParticleBoundaryAction(PARTICLE_ACTION p_action)
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void ParticleSystem::setParticleSize(float p_size)
 {
-	particleGroup.setScaledSize(p_size);
+	particleGroup.setScaledSize(trimValue(p_size, MIN_PARTICLE_SIZE, MAX_PARTICLE_SIZE));
 }
 float ParticleSystem::getParticleSize()
 {
@@ -205,16 +183,16 @@ float ParticleSystem::getParticleSize()
 }
 void ParticleSystem::setParticleSizeUp()
 {
-	setParticleSize(getParticleSize()+0.05);
+	setParticleSize(getParticleSize()+0.025);
 }
 void ParticleSystem::setParticleSizeDown()
 {
-	setParticleSize(getParticleSize()-0.05);
+	setParticleSize(getParticleSize()-0.025);
 }
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void ParticleSystem::setParticleCount(int p_count)
 {
-	particleGroup.setParticlesCount(p_count);
+	particleGroup.setParticlesCount(trimValue(p_count, MIN_PARTICLE_COUNT, MAX_PARTICLE_COUNT));
 }
 int ParticleSystem::getParticleCount()
 {
@@ -229,24 +207,28 @@ void ParticleSystem::setParticleCountDown()
 	setParticleCount(getParticleCount()-1000);
 }
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void ParticleSystem::colorTransientLengthChange()
+
+void ParticleSystem::setColorTransientLength(float p_length)
 {
-	particleColorManager.setTrasitionLength(colorTransientLengthScrollbar->GetAdjustment()->GetValue());
-	colorTransientLengthLabel->SetText(
-			"Color transient speed (secs) : " + getString(particleColorManager.getTrasitionLength()));
+	particleColorManager.setTrasitionLength(trimValue(p_length, MIN_TRANSATION_LENGTH, MAX_TRANSATION_LENGTH));
 }
-void ParticleSystem::colorTransientLengthUp()
+float ParticleSystem::getColorTransientLength()
 {
-	colorTransientLengthScrollbar->GetAdjustment()->Increment();
+	return particleColorManager.getTrasitionLength();
 }
-void ParticleSystem::colorTransientLengthDown()
+void ParticleSystem::setColorTransientLengthUp()
 {
-	colorTransientLengthScrollbar->GetAdjustment()->Decrement();
+	setColorTransientLength(getColorTransientLength() + 0.5f);
 }
+void ParticleSystem::setColorTransientLengthDown()
+{
+	setColorTransientLength(getColorTransientLength() - 0.5f);
+}
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void ParticleSystem::setParticleAlpha(float p_alpha)
 {
-	particleGroup.setAlpha(p_alpha);
+	particleGroup.setAlpha(trimValue(p_alpha, MIN_PARTICLE_ALPHA, MAX_PARTICLE_ALPHA));
 }
 float ParticleSystem::getParticleAlpha()
 {
@@ -254,11 +236,11 @@ float ParticleSystem::getParticleAlpha()
 }
 void ParticleSystem::setParticleAlphaUp()
 {
-	particleGroup.setAlpha(getParticleAlpha()+2);
+	setParticleAlpha(getParticleAlpha()+2);
 }
 void ParticleSystem::setParticleAlphaDown()
 {
-	particleGroup.setAlpha(getParticleAlpha()-2);
+	setParticleAlpha(getParticleAlpha()-2);
 }
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void ParticleSystem::changeColorScheme()
@@ -371,9 +353,9 @@ int ParticleSystem::run()
 				if (event.key.code == KEY_GRAVITY_DOWN)
 					setGravitationDown();
 				if (event.key.code == KEY_PARTICLE_COLORTRANS_LENGTHPLUS)
-					colorTransientLengthUp();
+					setColorTransientLengthUp();
 				if (event.key.code == KEY_PARTICLE_COLORTRANS_LENGTHMINUS)
-					colorTransientLengthDown();
+					setColorTransientLengthDown();
 				if (event.key.code == KEY_PARTICLE_SIZE_UP)
 					setParticleSizeUp();
 				if (event.key.code == KEY_PARTICLE_SIZE_DOWN)

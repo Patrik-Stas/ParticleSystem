@@ -20,6 +20,16 @@ ShapeRectangle::~ShapeRectangle()
 {
 }
 
+Point ShapeRectangle::getOposittePosition(Point pt) const
+{
+	int offset = 2;
+	if (pt.x > x + width) pt.x = x + offset;
+	else  if (pt.x < 0) pt.x =  x + width - offset;
+	if (pt.y > y + height) pt.y = y + offset;
+	else if (pt.y < 0) pt.y =  y + height - offset;
+	return pt;
+}
+
 bool ShapeRectangle::isInsideX(float p_x) const
 {
 	if (p_x >= x && p_x <= (x + width) )

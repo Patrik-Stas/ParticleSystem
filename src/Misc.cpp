@@ -29,3 +29,14 @@ std::string getActualTime()
 	  strftime (buffer,80,"%Y-%m-%d-%H-%M-%S",timeinfo);
 	  return std::string (buffer, strlen(buffer));
 }
+
+int trimValue(int value, int min, int max)
+{
+	return (value>max) ? max : (value<min) ? min : value;
+}
+
+float trimValue(float value, float min, float max)
+{
+	return (value>max) ? max : (value<min) ? min : value;
+}
+

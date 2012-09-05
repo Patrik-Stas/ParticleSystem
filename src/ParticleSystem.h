@@ -126,16 +126,16 @@ public:
 	void setParticleCountUp();
 	void setParticleCountDown();
 
+
 	void setParticleAlpha(float p_alpha);
 	float getParticleAlpha();
 	void setParticleAlphaUp();
 	void setParticleAlphaDown();
 
-	sfg::Scrollbar::Ptr colorTransientLengthScrollbar;
-	sfg::Label::Ptr colorTransientLengthLabel;
-	void colorTransientLengthChange();
-	void colorTransientLengthUp();
-	void colorTransientLengthDown();
+	void setColorTransientLength(float p_length);
+	float getColorTransientLength();
+	void setColorTransientLengthUp();
+	void setColorTransientLengthDown();
 
 	void changeColorScheme();
 
@@ -146,7 +146,6 @@ public:
 	bool toTakePicture;
 	void takeScreenshot();
 	void buttonActionTakeScreenshot();
-	sfg::Button::Ptr takePictureButton;
 
 	void setDotMode(bool p_dotMode);
 	bool isDotMode();

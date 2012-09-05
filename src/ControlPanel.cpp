@@ -10,6 +10,8 @@
 #include "Misc.h"
 #include <iostream>
 
+#include "Constants.h"
+
 using std::cout;
 using std::endl;
 using std::cerr;
@@ -21,12 +23,12 @@ ControlPanel::ControlPanel(ParticleSystem* p_particleSystem, sfg::Box::Orientati
 	panelBox = sfg::Box::Create(p_orientation, p_spacing);
 	panelBox->Pack(sfg::Label::Create("--- Gravitation settings ---"));
 	panelBox->Pack(gravity_label = sfg::Label::Create());
-	panelBox->Pack(gravityScrollbar = getScrollbar(0, 50.f, 0.2f, 5.f, &ControlPanel::gravityGuiChange, this));
+	panelBox->Pack(gravityScrollbar = getScrollbar(MIN_GRAVITY, MAX_GRAVITY, 0.2f, 5.f, &ControlPanel::gravityGuiChange, this));
 
 	// GRAVITY POINT WEIGHT
 	panelBox->Pack(gravityPointWeightLabel = sfg::Label::Create());
 	panelBox->Pack(
-			gravityPointWeightScrollbar = getScrollbar(0, 200000.f, 10000.f, 30000.f,
+			gravityPointWeightScrollbar = getScrollbar(MIN_GRAVITYPOINT_WEIGHT, MAX_GRAVITYPOINT_WEIGHT, 10000.f, 30000.f,
 					&ControlPanel::gravityPointWeightGuiChange, this));
 
 	// SIDE GRAVITY
@@ -52,7 +54,7 @@ ControlPanel::ControlPanel(ParticleSystem* p_particleSystem, sfg::Box::Orientati
 	// PARTICLE SIZE
 	panelBox->Pack(particleSizeLabel = sfg::Label::Create("Particle size :"));
 	panelBox->Pack(
-			particleSizeScrollbar = getScrollbar(0.01, 1.f, 0.01f, 0.025f, &ControlPanel::particleSizeGuiChange, this));
+			particleSizeScrollbar = getScrollbar(MIN_PARTICLE_SIZE, MAX_PARTICLE_SIZE, 0.01f, 0.025f, &ControlPanel::particleSizeGuiChange, this));
 
 	// PARTICLE COUNT
 	panelBox->Pack(particleCountLabel = sfg::Label::Create("Particle count :"));
@@ -60,7 +62,7 @@ ControlPanel::ControlPanel(ParticleSystem* p_particleSystem, sfg::Box::Orientati
 			particleCountScrollbar = getScrollbar(1, 60000, 2000, 5000, &ControlPanel::particleCountGuiChange, this));
 	panelBox->Pack(particleAlphaLabel = sfg::Label::Create("Particle opacity : "));
 	panelBox->Pack(
-			particleAlphaScrollbar = getScrollbar(0, 255.f, 2.f, 8.f, &ControlPanel::particleAlphaGuiChange, this));
+			particleAlphaScrollbar = getScrollbar(MIN_PARTICLE_COUNT, MAX_PARTICLE_COUNT, 2.f, 8.f, &ControlPanel::particleAlphaGuiChange, this));
 
 	// COLOR CHANGE BUTTON
 	changeColorSchemeButton = sfg::Button::Create("Change color scheme");
@@ -88,6 +90,14 @@ ControlPanel::ControlPanel(ParticleSystem* p_particleSystem, sfg::Box::Orientati
 	panelBox->Pack(mouseGravityPoint);
 	panelBox->Pack(autoGravityPoint);
 
+	panelBox->Pack(colorTransientLengthLabel = sfg::Label::Create("Color transient speed (secs) : "));
+	panelBox->Pack(
+			colorTransientLengthScrollbar = getScrollbar(MIN_TRANSATION_LENGTH, MAX_TRANSATION_LENGTH, 0.3f, 1.f, &ControlPanel::colorTransientLengthGuiChange,
+					this));
+
+	takeScreenshotButton = sfg::Button::Create("Take picture");
+	 takeScreenshotButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&ControlPanel::takeScreenshot, this);
+	 panelBox->Pack(takeScreenshotButton);
 }
 
 ControlPanel* ControlPanel::getControlPanel(ParticleSystem* p_particleSystem, sfg::Box::Orientation p_orientation,
@@ -228,8 +238,24 @@ void ControlPanel::gravityPointModeGuiUpdate()
 	else
 		autoGravityPoint->SetActive(true);
 }
-
 // ==================================================================
+void ControlPanel::colorTransientLengthGuiChange()
+{
+	float length = colorTransientLengthScrollbar->GetAdjustment()->GetValue();
+	particleSystem->setColorTransientLength(length);
+	colorTransientLengthLabel->SetText("Color transient speed (secs) : " + getString(length));
+}
+void ControlPanel::colorTransientLengthGuiUpdate()
+{
+	colorTransientLengthScrollbar->GetAdjustment()->SetValue(particleSystem->getColorTransientLength());
+}
+// ==================================================================
+
+void ControlPanel::takeScreenshot()
+{
+	particleSystem->takeScreenshot();
+}
+
 void ControlPanel::updateGuiByValues()
 {
 	gravitySliderGuiUpdate();
@@ -237,8 +263,10 @@ void ControlPanel::updateGuiByValues()
 	sideGravitySliderGuiUpdate();
 	particleSizeGuiUpdate();
 	particleCountGuiUpdate();
+	particleAlphaGuiUpdate();
 	drawModeGuiUpdate();
 	gravityPointModeGuiUpdate();
+	colorTransientLengthGuiUpdate();
 //	boundaryActionGuiUpdate();
 }
 

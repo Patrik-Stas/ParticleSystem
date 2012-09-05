@@ -32,6 +32,12 @@ Point ShapeCircle::getInsidePoint() const
 }
 
 
+Point ShapeCircle::getOposittePosition(Point pt) const
+{
+	abort(); // not implemented
+}
+
+
 Point ShapeCircle::getClosestInsidePoint(Point p_pt) const
 {
 	return getInsidePoint(); /// NEET TO IMPLEMENT !!!!!!!!!!!

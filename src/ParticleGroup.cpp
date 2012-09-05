@@ -148,7 +148,7 @@ void ParticleGroup::checkBounds()
 			}
 			case MIRROR_PORT:
 			{
-				//		moveableArea->getMirroredPosition();
+				particle->setPosition(moveableArea->getOposittePosition(particle->getPosition()));
 				break;
 			}
 			case RESPAWN:

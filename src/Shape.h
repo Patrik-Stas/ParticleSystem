@@ -18,6 +18,7 @@ public:
 	virtual bool isInside(Point p_pt) const = 0;
 	virtual Point getInsidePoint() const = 0;
 	virtual Point getClosestInsidePoint(Point p_pt) const = 0;
+	virtual Point getOposittePosition(Point pt) const = 0;
 	virtual ~Shape();
 protected:
 	float x;

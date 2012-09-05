@@ -75,14 +75,6 @@ Color Gradient::getColorBetween(Color startColor, Color endColor, float partsTot
 	int newRed =  startColor.getRed() + partFromStart * redShift;
 	int newGreen =  startColor.getGreen() + partFromStart * greenShift;
 	int newBlue =  startColor.getBlue() + partFromStart * blueShift;
-	Color returnColor (abs(newRed), abs(newGreen), abs(newBlue), startColor.getAlpha());
-/*	cout << "redshift :" << redShift << endl;
-	cout << "addition :" <<  partFromStart * redShift << endl;
-	cout << "oldRed :" << startColor.getRed() << "    returnRed : " << returnColor.getRed() << endl;
-	cout << "PARTS TOTAL : " << partsTotal << endl;
-	cout << "Part returned" << partFromStart << endl;
-	cout << "start color " << startColor << endl;
-	cout << " endColor " << endColor << endl;
-	cout << "returning color" << returnColor << endl;*/
-	return returnColor;
+	int newAlpha =  startColor.getAlpha() + partFromStart * alphaShift;
+	return Color (abs(newRed), abs(newGreen), abs(newBlue), abs(newAlpha));
 }
