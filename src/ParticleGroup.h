@@ -24,6 +24,7 @@ enum BOUND_ACTION
 	bound_kill
 };
 
+/// represents
 class ParticleGroup
 {
 public:
@@ -38,7 +39,7 @@ public:
 	void addParticle(Particle* object);
 	void setRandVect();
 	void processData(float framerate);
-	void applyPhysics();
+	void applyPhysics( ParticlePhysics* particlePhysics);
 	void checkBounds();
 	void respawn(std::list<Particle*>::iterator particle);
 	int getParticleCount();
@@ -49,7 +50,6 @@ public:
 	void setDefaultWeight(float defaultWeight);
 	void setEmitter( Emitter* emitter);
 	void setMoveableArea( Shape* moveableArea);
-	void setParticlePhysics( ParticlePhysics* particlePhysics);
 	void setParticleSprite( sf::Sprite particleSprite);
 
 private:

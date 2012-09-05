@@ -100,7 +100,7 @@ void ParticleGroup::respawn(std::list<Particle*>::iterator particle)
 	(*particle)->setVectorXY(emitter->emitVector());
 }
 
-void ParticleGroup::applyPhysics()
+void ParticleGroup::applyPhysics( ParticlePhysics* particlePhysics )
 {
 	std::list<Particle*>::iterator beginIt = particles.begin();
 	std::list<Particle*>::iterator endIt = particles.end();
@@ -174,12 +174,6 @@ void ParticleGroup::setMoveableArea( Shape* moveableArea)
 {
 	this->moveableArea = moveableArea;
 }
-
-void ParticleGroup::setParticlePhysics( ParticlePhysics* particlePhysics)
-{
-	this->particlePhysics = particlePhysics;
-}
-
 
 void ParticleGroup::setParticleSprite( sf::Sprite particleSprite)
 {

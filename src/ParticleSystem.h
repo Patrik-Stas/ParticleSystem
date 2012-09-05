@@ -129,6 +129,8 @@ private:
 	sfg::Scrollbar::Ptr particleCountScrollbar;
 	sfg::Label::Ptr particleCountLabel;
 	void particleCountChange();
+	void particleCountUp();
+	void particleCountDown();
 
 	sfg::Scrollbar::Ptr colorTransientLengthScrollbar;
 	sfg::Label::Ptr colorTransientLengthLabel;

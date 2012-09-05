@@ -47,11 +47,13 @@ const sf::Keyboard::Key ParticleSystem::KEY_GRAVITY_UP = sf::Keyboard::D;
 const sf::Keyboard::Key ParticleSystem::KEY_GRAVITY_DOWN = sf::Keyboard::C;
 const sf::Keyboard::Key ParticleSystem::KEY_PARTICLE_SIZE_UP = sf::Keyboard::K;
 const sf::Keyboard::Key ParticleSystem::KEY_PARTICLE_SIZE_DOWN = sf::Keyboard::M;
-const sf::Keyboard::Key ParticleSystem::KEY_PARTICLE_ALPHA_UP =  sf::Keyboard::J;
-const sf::Keyboard::Key ParticleSystem::KEY_PARTICLE_ALPHA_DOWN =  sf::Keyboard::N;
+const sf::Keyboard::Key ParticleSystem::KEY_PARTICLE_ALPHA_UP = sf::Keyboard::J;
+const sf::Keyboard::Key ParticleSystem::KEY_PARTICLE_ALPHA_DOWN = sf::Keyboard::N;
 const sf::Keyboard::Key ParticleSystem::KEY_GP_AUTOFORCE_SWITCH = sf::Keyboard::Space;
 const sf::Keyboard::Key ParticleSystem::KEY_PARTICLE_COLORTRANS_LENGTHPLUS = sf::Keyboard::R;
 const sf::Keyboard::Key ParticleSystem::KEY_PARTICLE_COLORTRANS_LENGTHMINUS = sf::Keyboard::E;
+const sf::Keyboard::Key ParticleSystem::KEY_PARTICLE_COUNT_UP = sf::Keyboard::H;
+const sf::Keyboard::Key ParticleSystem::KEY_PARTICLE_COUNT_DOWN = sf::Keyboard::B;
 const sf::Keyboard::Key ParticleSystem::KEY_DRAWMODE_SWITCH = sf::Keyboard::L;
 
 const Color ParticleSystem::DEFAULT_GRAVITYPOINT_COLOR = Color(0, 255, 255, 200);
@@ -64,7 +66,7 @@ ShapeCircle circle(Point(200, 200), 60);
 Emitter ParticleSystem::circleEmitter = Emitter(&circle);
 
 ParticleSystem::ParticleSystem() :
-		moveableArea(Point(0, 0), SCREEN_WIDTH, SCREEN_HEIGHT-7 )
+		moveableArea(Point(0, 0), SCREEN_WIDTH, SCREEN_HEIGHT - 7)
 {
 	automatedMovingObject.setMoveableArea(&moveableArea);
 	automatedGravityPoint.setAutomatedMovingObject(&automatedMovingObject);
@@ -78,7 +80,6 @@ ParticleSystem::ParticleSystem() :
 	particlePhysics.setGravitation(1.0f);
 	particlePhysics.setDownForce(false);
 
-	particleGroup.setParticlePhysics(&particlePhysics);
 	particleGroup.setMoveableArea(&moveableArea);
 	particleGroup.setBoundAction(DEFAULT_BOUND_ACTION);
 	particleGroup.setEmitter(&circleEmitter);
@@ -99,8 +100,9 @@ ParticleSystem::ParticleSystem() :
 	main_box->Pack(gravity_label = sfg::Label::Create());
 	main_box->Pack(gravityScrollbar = getScrollbar(0, 50.f, 0.2f, 5.f, &ParticleSystem::gravityChange, this));
 	main_box->Pack(gravityPointWeightLabel = sfg::Label::Create());
-	main_box->Pack(gravityPointWeightScrollbar = getScrollbar(0, 200000.f, 10000.f, 30000.f, &ParticleSystem::gravityPointWeightChange,
-			this));
+	main_box->Pack(
+			gravityPointWeightScrollbar = getScrollbar(0, 200000.f, 10000.f, 30000.f,
+					&ParticleSystem::gravityPointWeightChange, this));
 	planetaryGravity = sfg::CheckButton::Create("Planetary gravity");
 	planetaryGravity->GetSignal(sfg::ToggleButton::OnToggle).Connect(&ParticleSystem::SwitchDownForce, this);
 	main_box->Pack(planetaryGravity);
@@ -121,11 +123,14 @@ ParticleSystem::ParticleSystem() :
 	main_box->Pack(mirrorPort);
 	main_box->Pack(kill);
 	main_box->Pack(particleSizeLabel = sfg::Label::Create("Particle size :"));
-	main_box->Pack(particleSizeScrollbar = getScrollbar(0.01, 1.f, 0.01f, 0.025f, &ParticleSystem::particleSizeChange, this));
+	main_box->Pack(
+			particleSizeScrollbar = getScrollbar(0.01, 1.f, 0.01f, 0.025f, &ParticleSystem::particleSizeChange, this));
 	main_box->Pack(particleCountLabel = sfg::Label::Create("Particle count :"));
-	main_box->Pack(particleCountScrollbar = getScrollbar(1, 60000, 2000, 5000, &ParticleSystem::particleCountChange, this));
+	main_box->Pack(
+			particleCountScrollbar = getScrollbar(1, 60000, 2000, 5000, &ParticleSystem::particleCountChange, this));
 	main_box->Pack(particleAlphaLabel = sfg::Label::Create("Particle opacity : "));
-	main_box->Pack(particleAlphaScrollbar = getScrollbar(0, 255.f, 2.f, 8.f, &ParticleSystem::particleAlphaChange, this));
+	main_box->Pack(
+			particleAlphaScrollbar = getScrollbar(0, 255.f, 2.f, 8.f, &ParticleSystem::particleAlphaChange, this));
 
 	switchColorScheme = sfg::Button::Create("Change color scheme");
 	switchColorScheme->GetSignal(sfg::Widget::OnLeftClick).Connect(&ParticleSystem::changeColorScheme, this);
@@ -136,9 +141,10 @@ ParticleSystem::ParticleSystem() :
 			&ParticleSystem::autoColorSchemeChangeToggleButtonAction, this);
 	main_box->Pack(autoColorSchemeToggleButton);
 
-
 	main_box->Pack(colorTransientLengthLabel = sfg::Label::Create("Color transient speed (secs) : "));
-	main_box->Pack(colorTransientLengthScrollbar = getScrollbar(0, 3.f, 0.3f, 1.f, &ParticleSystem::colorTransientLengthChange, this));
+	main_box->Pack(
+			colorTransientLengthScrollbar = getScrollbar(0, 3.f, 0.3f, 1.f, &ParticleSystem::colorTransientLengthChange,
+					this));
 
 	takePictureButton = sfg::Button::Create("Take picture");
 	takePictureButton->GetSignal(sfg::Widget::OnLeftClick).Connect(&ParticleSystem::buttonActionTakeScreenshot, this);
@@ -227,6 +233,17 @@ void ParticleSystem::particleCountChange()
 	particleGroup.setParticlesCount(particlesCount);
 	particleCountLabel->SetText("Particle count : " + getString(particlesCount));
 }
+
+void ParticleSystem::particleCountUp()
+{
+	particleCountScrollbar->GetAdjustment()->Increment();
+}
+
+void ParticleSystem::particleCountDown()
+{
+	particleCountScrollbar->GetAdjustment()->Decrement();
+}
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void ParticleSystem::particleSizeChange()
@@ -286,7 +303,8 @@ void ParticleSystem::gravityPointWeightDown()
 void ParticleSystem::colorTransientLengthChange()
 {
 	particleColorManager.setTrasitionLength(colorTransientLengthScrollbar->GetAdjustment()->GetValue());
-	colorTransientLengthLabel->SetText("Color transient speed (secs) : " + getString(particleColorManager.getTrasitionLength()));
+	colorTransientLengthLabel->SetText(
+			"Color transient speed (secs) : " + getString(particleColorManager.getTrasitionLength()));
 }
 
 void ParticleSystem::colorTransientLengthUp()
@@ -299,52 +317,6 @@ void ParticleSystem::colorTransientLengthDown()
 	colorTransientLengthScrollbar->GetAdjustment()->Decrement();
 }
 
-/*
-void ParticleSystem::particleSizeUp(int val)
-{
-	int newWeight = gravityPointWeightScrollbar->GetAdjustment()->GetValue() + val;
-	gravityPointWeightScrollbar->GetAdjustment()->SetValue(newWeight);
-	gravityPointWeightChange();
-}
-
-void ParticleSystem::particleSizeDown(int val)
-{
-	int newWeight = gravityPointWeightScrollbar->GetAdjustment()->GetValue() - val;
-	gravityPointWeightScrollbar->GetAdjustment()->SetValue(newWeight);
-	gravityPointWeightChange();
-}
-
-
-void ParticleSystem::particleAlphaUp(int val)
-{
-	int newWeight = gravityPointWeightScrollbar->GetAdjustment()->GetValue() + val;
-	gravityPointWeightScrollbar->GetAdjustment()->SetValue(newWeight);
-	gravityPointWeightChange();
-}
-
-void ParticleSystem::particleAlphaDown(int val)
-{
-	int newWeight = gravityPointWeightScrollbar->GetAdjustment()->GetValue() - val;
-	gravityPointWeightScrollbar->GetAdjustment()->SetValue(newWeight);
-	gravityPointWeightChange();
-}
-
-void ParticleSystem::colorTransientSpeedUp(int val)
-{
-	int newWeight = gravityPointWeightScrollbar->GetAdjustment()->GetValue() + val;
-	gravityPointWeightScrollbar->GetAdjustment()->SetValue(newWeight);
-	gravityPointWeightChange();
-}
-
-void ParticleSystem::colorTransientSpeedDown(int val)
-{
-	int newWeight = gravityPointWeightScrollbar->GetAdjustment()->GetValue() - val;
-	gravityPointWeightScrollbar->GetAdjustment()->SetValue(newWeight);
-	gravityPointWeightChange();
-}*/
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-
 void ParticleSystem::particleAlphaChange()
 {
 	int alpha = particleAlphaScrollbar->GetAdjustment()->GetValue();
@@ -354,14 +326,13 @@ void ParticleSystem::particleAlphaChange()
 
 void ParticleSystem::particleAlphaUp()
 {
-	 particleAlphaScrollbar->GetAdjustment()->Increment();
+	particleAlphaScrollbar->GetAdjustment()->Increment();
 }
 
 void ParticleSystem::particleAlphaDown()
 {
 	particleAlphaScrollbar->GetAdjustment()->Decrement();
 }
-
 
 void ParticleSystem::SwitchDownForce()
 {
@@ -401,8 +372,10 @@ void ParticleSystem::drawModeChangeAction()
 
 void ParticleSystem::switchDrawMode()
 {
-	if (dotMode) paintDrawMode->SetActive(true);
-	else dotDrawMode->SetActive(true);
+	if (dotMode)
+		paintDrawMode->SetActive(true);
+	else
+		dotDrawMode->SetActive(true);
 }
 
 void ParticleSystem::buttonActionTakeScreenshot()
@@ -417,8 +390,6 @@ void ParticleSystem::changeGravityPointMode()
 	if (manualGravityPointMode->IsActive())
 		gravityPoint = &mouseControllGravityPoint;
 }
-
-
 
 void ParticleSystem::takeScreenshot()
 {
@@ -505,6 +476,10 @@ int ParticleSystem::run()
 					switchGravityPointForceActive();
 				if (event.key.code == KEY_DRAWMODE_SWITCH)
 					switchDrawMode();
+				if (event.key.code == KEY_PARTICLE_COUNT_UP)
+					particleCountUp();
+				if (event.key.code == KEY_PARTICLE_COUNT_DOWN)
+					particleCountDown();
 			}
 		}
 
@@ -521,7 +496,7 @@ int ParticleSystem::run()
 
 			lastTime = clock.getElapsedTime();
 
-			particleGroup.applyPhysics();
+			particleGroup.applyPhysics(&particlePhysics);
 			particleGroup.processData(framerate);
 			particleGroup.checkBounds();
 			gravityPoint->calcNextPosition(framerate);
@@ -535,7 +510,6 @@ int ParticleSystem::run()
 				sfguiWindow->Update(static_cast<float>(clockGui.getElapsedTime().asMicroseconds()) / 1000000.f);
 				clockGui.restart();
 			}
-
 
 			if (toTakePicture)
 				takeScreenshot();
