@@ -93,10 +93,14 @@ ParticleSystem::ParticleSystem() :
 	fpsText.setPosition(300, 100);
 
 	sfguiWindow = sfg::Window::Create();
-	main_box = sfg::Box::Create(sfg::Box::VERTICAL);
+	controlPanel = sfg::ControlPanel::Create(this, sfg::Box::VERTICAL, 0.f);
+
+	/*main_box = sfg::Box::Create(sfg::Box::VERTICAL);
 
 	main_box->Pack(sfg::Label::Create("--- Gravitation settings ---"));
 	main_box->Pack(gravity_label = sfg::Label::Create());
+
+
 	main_box->Pack(gravityScrollbar = getScrollbar(0, 50.f, 0.2f, 5.f, &ParticleSystem::gravityChange, this));
 	main_box->Pack(gravityPointWeightLabel = sfg::Label::Create());
 	main_box->Pack(
@@ -158,7 +162,8 @@ ParticleSystem::ParticleSystem() :
 	main_box->Pack(dotDrawMode);
 	main_box->Pack(paintDrawMode);
 
-	sfguiWindow->Add(main_box);
+	sfguiWindow->Add(main_box);*/
+	sfguiWindow->Add(controlPanel);
 	sfguiWindow->SetPosition(sf::Vector2f(SCREEN_WIDTH - sfguiWindow->GetRequisition().x, 0));
 
 	respawn->SetActive(true);
@@ -185,15 +190,15 @@ ParticleSystem::ParticleSystem() :
 	manualGravityPointMode->SetActive(true);
 	dotDrawMode->SetActive(true);
 	srand(time(NULL));
-	colorTransientLengthChange();
+
+	/*colorTransientLengthChange();
 	changeColorScheme();
 	drawModeChangeAction();
 	ParticleBoundaryAction();
-	gravityChange();
 	gravityPointWeightChange();
 	particleCountChange();
 	particleSizeChange();
-	ParticleBoundaryAction();
+	ParticleBoundaryAction();*/
 
 	automaticMovingObject.setMoveableArea(&moveableArea);
 	applicationPaused = false;
@@ -212,7 +217,7 @@ sf::Font ParticleSystem::loadMainFont()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-sfg::Scrollbar::Ptr ParticleSystem::getScrollbar(float lowerValue, float upperValue, float minorStep, float majorStep,
+sfg::Scrollbar::Ptr getScrollbar(float lowerValue, float upperValue, float minorStep, float majorStep,
 		void (ParticleSystem::*function)(), ParticleSystem* object)
 {
 	sfg::Scrollbar::Ptr ptr = sfg::Scrollbar::Create(sfg::Scrollbar::HORIZONTAL);
@@ -263,21 +268,21 @@ void ParticleSystem::particleSizeDown()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void ParticleSystem::gravityChange()
+
+
+void ParticleSystem::setGravitation(float p_gravitation)
 {
-	float gravitation = gravityScrollbar->GetAdjustment()->GetValue();
-	particlePhysics.setGravitation(gravitation);
-	gravity_label->SetText("Gravity : " + getString(gravitation));
+	particlePhysics.setGravitation(p_gravitation);
 }
 
-void ParticleSystem::gravityUp()
+void ParticleSystem::setGravitationUp()
 {
-	gravityScrollbar->GetAdjustment()->Increment();
+	particlePhysics.setGravitation ( particlePhysics.getGravitation() + 2000 );
 }
 
-void ParticleSystem::gravityDown()
+void ParticleSystem::setGravitationDown()
 {
-	gravityScrollbar->GetAdjustment()->Decrement();
+	particlePhysics.setGravitation ( particlePhysics.getGravitation() - 2000 );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -454,9 +459,9 @@ int ParticleSystem::run()
 				if (event.key.code == KEY_GP_WEIGHT_DOWN)
 					gravityPointWeightDown();
 				if (event.key.code == KEY_GRAVITY_UP)
-					gravityUp();
+					setGravitationUp();
 				if (event.key.code == KEY_GRAVITY_DOWN)
-					gravityDown();
+					setGravitationDown();
 				if (event.key.code == KEY_PARTICLE_COLORTRANS_LENGTHPLUS)
 					colorTransientLengthUp();
 				if (event.key.code == KEY_PARTICLE_COLORTRANS_LENGTHMINUS)

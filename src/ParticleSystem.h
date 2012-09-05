@@ -27,6 +27,8 @@
 #include "AutomatedGravityPoint.h"
 #include "MouseControllGravityPoint.h"
 #include "ParticleColorManager.h"
+#include "ControlPanel.h"
+//class sfg::ControlPanel;
 
 enum PARTICLE_ACTION
 {
@@ -108,9 +110,9 @@ private:
 
 	sfg::Scrollbar::Ptr gravityScrollbar;
 	sfg::Label::Ptr gravity_label;
-	void gravityChange();
-	void gravityUp();
-	void gravityDown();
+	void setGravitationUp();
+	void setGravitationDown();
+	void setGravitation(float p_gravitation);
 
 	GravityPoint* gravityPoint;
 	AutomatedGravityPoint automatedGravityPoint;
@@ -169,6 +171,8 @@ private:
 
 	void switchGravityPointForceActive();
 	sfg::Box::Ptr main_box;
+	sfg::ControlPanel::Ptr controlPanel;
+
 	sfg::Window::Ptr sfguiWindow;
 	sfg::SFGUI sfgui;
 
